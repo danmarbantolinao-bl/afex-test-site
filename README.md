@@ -1,6 +1,8 @@
-# 🔧 AFEX Test Site - Automation Testing Platform
+# 🎨 Danz - AFEX Test Site - Automation Testing Platform
 
 A comprehensive HTML/CSS/JavaScript testing platform for automation testing with various form elements, interactions, and test scenarios based on the AFEX Function specifications.
+
+**Created by:** Danmar Bantolinao - Optimization QA & Dev Support
 
 ## 📋 Overview
 
@@ -15,6 +17,37 @@ AFEX Test Site is designed to test and validate automation scripts for:
 - **Rich Text Editing**: Froala-like text editor
 
 ## ✨ Features
+
+### **🆕 Enhanced Features (Latest Update)**
+
+#### **Fill & Select with Multiple Selections**
+- Type to search dropdown options
+- Click items to add them to selection
+- See all selected items in blue display box
+- Can select multiple items and see them listed
+- Perfect for testing multi-select automation
+
+#### **Fill & Enter with Value Submission**
+- Type value and press Enter key
+- Value automatically added to selected list
+- Visual feedback with green border + toast notification
+- Shows all submitted values in real-time
+- Can submit multiple values sequentially
+
+#### **Dropdown Info Tooltips**
+- Hover over **ℹ️** icon next to any dropdown
+- See popup showing available dropdown options
+- Helpful for understanding what each dropdown contains
+- Example: Hover icon shows "Options: Apple, Banana, Cherry, Date, Elderberry"
+
+#### **Enhanced Button Styling**
+- Buttons now have shadow effects (look 3D and pressable)
+- Hover effect: buttons lift up with increased shadow
+- Click effect: buttons press down for tactile feedback
+- Smooth animations for professional feel
+- All button types: Primary, Secondary, Success, Danger, Info
+
+---
 
 ### 1. **Signup Form**
 - Text input fields (First Name, Last Name, Email, Password, Phone)
@@ -72,8 +105,15 @@ Complete listing creation with:
 ### 3. **Test Components Tab**
 Interactive components for testing:
 - Toggle switch functionality
-- Various dropdown types
-- Button variations
+- Various dropdown types with enhanced features:
+  - **Info Tooltip** - Hover over ℹ️ icon to see dropdown options
+  - **Fill & Select** - Multiple selection with visual display
+  - **Fill & Enter** - Submit multiple values with auto-display
+  - **Selected Items Display** - See all selected values in real-time
+- Button variations with improved visual feedback:
+  - Shadow effects for depth
+  - Lift animation on hover
+  - Press-down effect on click
 - Modal/popup testing
 - Find and click simulations
 
@@ -88,6 +128,9 @@ Interactive components for testing:
 - [x] Fill with dropdown select
 - [x] Fill and enter key press
 - [x] Fill with fallback data
+- [x] **NEW**: Multiple selection with Fill & Select
+- [x] **NEW**: Multiple value submission with Fill & Enter
+- [x] **NEW**: Selected items display and tracking
 
 ### Click Tests
 - [x] Button clicks
@@ -486,6 +529,54 @@ For issues, questions, or suggestions:
 
 ---
 
+## 🔍 Quick Reference - Test Elements
+
+**Form IDs you can target:**
+```javascript
+// Signup
+#firstName, #lastName, #signupEmail, #signupPassword
+#individual, #business, #enterprise (radio)
+#newsletter, #updates, #terms (checkbox)
+#country (dropdown)
+
+// Listing
+#businessName, #businessType, #businessEmail
+#monOpen, #monClose, etc. (business hours)
+#logoUpload, #photo1Upload, #photo2Upload, #photo3Upload
+#plainText, #richTextEditor
+
+// Components - NEW ENHANCED FEATURES
+#dropdown-with-textbox (Fill & Select)
+#fillSelectDisplay (Shows selected items)
+#fillSelectList (Selected items list)
+
+#dropdown-enter (Fill & Enter)
+#enterSelectedDisplay (Shows submitted values)
+#enterSelectedList (Submitted values list)
+
+#testModal, #featureToggle, #findInput
+
+// Dropdown Info Tooltips
+.info-icon (Hover to see available options)
+```
+
+---
+
+## 👨‍💼 Author & Credits
+
+**Created by:** Danmar Bantolinao  
+**Role:** Optimization QA & Dev Support  
+**Project:** AFEX Test Site - Comprehensive Automation Testing Platform
+
+### Acknowledgments
+- Built with vanilla HTML, CSS, and JavaScript (no dependencies)
+- Designed for comprehensive form automation testing
+- Supports Selenium, Playwright, Cypress, and other automation frameworks
+- Continuously improved with enhanced features and better UX
+
+---
+
 **Last Updated**: 2024
 **Status**: Active Development
 **Compatibility**: All modern browsers (Chrome, Firefox, Safari, Edge)
+**License**: MIT
