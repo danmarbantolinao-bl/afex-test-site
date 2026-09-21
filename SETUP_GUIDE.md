@@ -2,6 +2,18 @@
 
 Complete guide to set up AFEX Test Site on GitHub and run it locally.
 
+## 🎨 Branding & Personalization
+
+This site is branded as **"Danz - AFEX Test Site"** with the AFEX heart logo (`afex_heart.gif`) in the header.
+
+To customize:
+- **Logo**: Replace `afex_heart.gif` with your own logo file (PNG, GIF, JPG)
+- **Header Title**: Edit the `<h1>` tag in `index.html` line ~50
+- **Footer Text**: Update footer credit text in `index.html` (search for "Dammad Bantolinao")
+- **Colors**: Edit CSS variables in `index.html` (`:root { --primary, --secondary, etc. }`)
+
+---
+
 ## 📋 Prerequisites
 
 - Git installed on your system

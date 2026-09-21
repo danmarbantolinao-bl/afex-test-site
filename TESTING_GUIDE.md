@@ -218,7 +218,119 @@ assert "\n" in textarea.get_attribute("value")
 
 ---
 
-### Test 7: Fill to Select Pattern
+### Test 7: Fill to Select Pattern with Multiple Selections
+
+**Description**: Test filling field and selecting multiple items from results
+
+**Target**: `#dropdown-with-textbox` (Fill & Select with multiple selections)
+
+**Test Procedure**:
+```javascript
+# Type in search field
+field = driver.find_element(By.ID, "dropdown-with-textbox")
+field.send_keys("Product")
+
+# Wait for results
+WebDriverWait(driver, 5).until(
+    EC.presence_of_element_located((By.CLASS_NAME, "search-result-item"))
+)
+
+# Click first result (Product A)
+result = driver.find_element(By.XPATH, "//div[@class='search-result-item' and contains(text(), 'Product A')]")
+result.click()
+
+# Verify first item selected
+display = driver.find_element(By.ID, "fillSelectDisplay")
+assert "Product A" in display.text
+
+# Select second item
+field.send_keys("Product")
+result = driver.find_element(By.XPATH, "//div[@class='search-result-item' and contains(text(), 'Product B')]")
+result.click()
+
+# Verify both items selected
+assert "Product A, Product B" in display.text
+```
+
+**Expected Results:**
+- ✓ Each click adds item to selection
+- ✓ Display shows all selected items
+- ✓ Can select multiple items
+- ✓ Blue display box shows in real-time
+
+---
+
+### Test 8: Fill & Enter Pattern with Value Submission
+
+**Description**: Test filling field and pressing Enter to submit values
+
+**Target**: `#dropdown-enter` (Fill & Enter)
+
+**Test Procedure**:
+```javascript
+# Type value
+field = driver.find_element(By.ID, "dropdown-enter")
+field.send_keys("Value1")
+
+# Press Enter
+from selenium.webdriver.common.keys import Keys
+field.send_keys(Keys.RETURN)
+
+# Verify value submitted
+display = driver.find_element(By.ID, "enterSelectedDisplay")
+assert display.is_displayed()
+assert "Value1" in display.text
+
+# Add second value
+field.send_keys("Value2")
+field.send_keys(Keys.RETURN)
+
+# Verify both values
+assert "Value1, Value2" in display.text
+```
+
+**Expected Results:**
+- ✓ Green border appears on field
+- ✓ Toast notification shows "✓ Added: Value1"
+- ✓ Value appears in display box
+- ✓ Field clears for next entry
+- ✓ Multiple values can be added
+
+---
+
+### Test 9: Dropdown Info Tooltip
+
+**Description**: Test hover tooltip showing dropdown options
+
+**Target**: `.info-icon` (info tooltip elements)
+
+**Test Procedure**:
+```javascript
+# Find info icon
+info_icon = driver.find_element(By.CLASS_NAME, "info-icon")
+
+# Hover over it
+from selenium.webdriver.common.action_chains import ActionChains
+actions = ActionChains(driver)
+actions.move_to_element(info_icon).perform()
+
+# Wait for tooltip
+time.sleep(0.5)
+
+# Verify tooltip appears with options
+tooltip_text = info_icon.get_attribute("title")
+assert "Option" in tooltip_text or "Product" in tooltip_text or "Apple" in tooltip_text
+```
+
+**Expected Results:**
+- ✓ Tooltip appears on hover
+- ✓ Shows available dropdown options
+- ✓ Example: "Options: Product A, Product B, Product C, Product D"
+- ✓ Disappears when mouse leaves
+
+---
+
+### Test 10: Fill to Select Pattern (Original)
 
 **Description**: Test filling field and selecting from results
 

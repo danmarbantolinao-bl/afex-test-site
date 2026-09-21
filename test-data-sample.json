@@ -262,6 +262,28 @@
         "selector": "#dropdown-with-textbox",
         "value": "Product A",
         "description": "Fill field and select matching result"
+      },
+      {
+        "type": "fill_and_select_multiple",
+        "selector": "#dropdown-with-textbox",
+        "displaySelector": "#fillSelectDisplay",
+        "listSelector": "#fillSelectList",
+        "values": ["Product A", "Product B", "Product C"],
+        "description": "Fill and select multiple items - each click adds to selection, display shows all items"
+      },
+      {
+        "type": "fill_and_enter",
+        "selector": "#dropdown-enter",
+        "displaySelector": "#enterSelectedDisplay",
+        "listSelector": "#enterSelectedList",
+        "values": ["Value1", "Value2", "Value3"],
+        "description": "Fill field and press Enter to submit values - shows toast notification and clears field after each entry"
+      },
+      {
+        "type": "info_tooltip",
+        "selector": ".info-icon",
+        "expectedTooltipContent": "Options:",
+        "description": "Hover over info icon to show dropdown options tooltip"
       }
     ],
     "modalTests": [
