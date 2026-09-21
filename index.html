@@ -145,6 +145,44 @@
             color: #e74c3c;
         }
 
+        /* Info Icon Tooltip */
+        .info-icon {
+            font-size: 0.9em;
+            cursor: help;
+            color: #3498db;
+            margin-left: 5px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .info-icon:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            white-space: nowrap;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            font-weight: normal;
+        }
+
+        .info-icon:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 115%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #333;
+            z-index: 1000;
+        }
+
         input[type="text"],
         input[type="email"],
         input[type="password"],
@@ -305,56 +343,99 @@
             font-size: 1em;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             text-decoration: none;
             display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:active,
+        .btn:active {
+            transform: scale(0.95);
         }
 
         .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
         }
 
         .btn-secondary {
             background: #f5f5f5;
             color: #333;
             border: 2px solid #ddd;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .btn-secondary:hover {
             background: #e8e8e8;
+            border-color: #bbb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
         }
 
         .btn-success {
             background: #27ae60;
             color: white;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
         }
 
         .btn-success:hover {
             background: #229954;
+            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .btn-success:active {
+            transform: translateY(-1px);
         }
 
         .btn-danger {
             background: #e74c3c;
             color: white;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
         }
 
         .btn-danger:hover {
             background: #c0392b;
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .btn-danger:active {
+            transform: translateY(-1px);
         }
 
         .btn-info {
             background: #3498db;
             color: white;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
         }
 
         .btn-info:hover {
             background: #2980b9;
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .btn-info:active {
+            transform: translateY(-1px);
         }
 
         /* Dropdown Styles */
@@ -603,6 +684,28 @@
         @keyframes slideDown {
             from { transform: translateY(-20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { 
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from { 
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to { 
+                transform: translateX(400px);
+                opacity: 0;
+            }
         }
 
         /* Responsive */
@@ -1058,7 +1161,9 @@
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="simple-dropdown">Simple Dropdown (No Search)</label>
+                        <label for="simple-dropdown">Simple Dropdown (No Search) 
+                            <span class="info-icon" title="Options: Option 1, Option 2, Option 3">ℹ️</span>
+                        </label>
                         <select id="simple-dropdown" name="simpleDropdown">
                             <option value="">Select an option</option>
                             <option value="option1">Option 1</option>
@@ -1067,7 +1172,9 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="search-dropdown">Searchable Dropdown</label>
+                        <label for="search-dropdown">Searchable Dropdown
+                            <span class="info-icon" title="Options: Apple, Banana, Cherry, Date, Elderberry">ℹ️</span>
+                        </label>
                         <div class="input-with-search">
                             <input type="text" id="search-dropdown" placeholder="Search..." onkeyup="handleDropdownSearch(this)">
                             <div class="search-results" id="dropdownResults"></div>
@@ -1077,15 +1184,23 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="dropdown-with-textbox">Dropdown with Textbox (Fill & Select)</label>
+                        <label for="dropdown-with-textbox">Dropdown with Textbox (Fill & Select) <span class="test-type">MULTI-SELECT</span>
+                            <span class="info-icon" title="Options: Product A, Product B, Product C, Product D">ℹ️</span>
+                        </label>
                         <div class="input-with-search">
-                            <input type="text" id="dropdown-with-textbox" placeholder="Type and select..." onkeyup="handleFillSelect(this)">
+                            <input type="text" id="dropdown-with-textbox" placeholder="Type and select... (can select multiple)" onkeyup="handleFillSelect(this)">
                             <div class="search-results" id="fillSelectResults"></div>
+                        </div>
+                        <div id="fillSelectDisplay" style="margin-top: 10px; padding: 10px; background: #f0fffb; border-radius: 6px; display: none; border-left: 4px solid #27ae60;">
+                            <small style="color: #666;">Selected Items: <span id="fillSelectList" style="font-weight: 600; color: #27ae60;"></span></small>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="dropdown-enter">Fill & Press Enter</label>
+                        <label for="dropdown-enter">Fill & Enter <span class="test-type">ENTER KEY</span></label>
                         <input type="text" id="dropdown-enter" placeholder="Type and press Enter..." onkeypress="handleEnterKey(event)">
+                        <div id="enterSelectedDisplay" style="margin-top: 10px; padding: 10px; background: #f0f8ff; border-radius: 6px; display: none; border-left: 4px solid #3498db;">
+                            <small style="color: #666;">Selected: <span id="enterSelectedList" style="font-weight: 600; color: #3498db;"></span></small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1347,13 +1462,99 @@
         }
 
         function selectFillSelect(element, value) {
-            document.getElementById('dropdown-with-textbox').value = value;
+            // Get current selections
+            let selectedArray = [];
+            const display = document.getElementById('fillSelectDisplay');
+            const listSpan = document.getElementById('fillSelectList');
+            
+            // Check if value already selected
+            if (listSpan.textContent.includes(value)) {
+                // Remove it if already selected
+                selectedArray = listSpan.textContent.split(', ').filter(item => item !== value);
+            } else {
+                // Add it to selections
+                if (listSpan.textContent) {
+                    selectedArray = listSpan.textContent.split(', ');
+                }
+                selectedArray.push(value);
+            }
+            
+            // Update display
+            if (selectedArray.length > 0) {
+                listSpan.textContent = selectedArray.join(', ');
+                display.style.display = 'block';
+            } else {
+                listSpan.textContent = '';
+                display.style.display = 'none';
+            }
+            
+            // Clear input
+            document.getElementById('dropdown-with-textbox').value = '';
             document.getElementById('fillSelectResults').classList.remove('show');
         }
 
         function handleEnterKey(event) {
             if (event.key === 'Enter') {
-                alert('Enter pressed with value: ' + event.target.value);
+                const value = event.target.value;
+                
+                if (!value.trim()) {
+                    return;
+                }
+                
+                // Add to selected list
+                const display = document.getElementById('enterSelectedDisplay');
+                const listSpan = document.getElementById('enterSelectedList');
+                
+                // Get current selections
+                let selectedArray = [];
+                if (listSpan.textContent) {
+                    selectedArray = listSpan.textContent.split(', ');
+                }
+                
+                // Add if not already there
+                if (!selectedArray.includes(value)) {
+                    selectedArray.push(value);
+                }
+                
+                // Update display
+                listSpan.textContent = selectedArray.join(', ');
+                display.style.display = 'block';
+                
+                // Show success feedback on field
+                event.target.style.borderColor = '#27ae60';
+                event.target.style.boxShadow = '0 0 0 3px rgba(39, 174, 96, 0.2)';
+                
+                // Show toast notification
+                const toast = document.createElement('div');
+                toast.textContent = '✓ Added: ' + value;
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #27ae60;
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 6px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                    z-index: 3000;
+                    animation: slideInRight 0.3s ease;
+                `;
+                document.body.appendChild(toast);
+                
+                // Clear input
+                event.target.value = '';
+                
+                // Auto-remove toast after 2 seconds
+                setTimeout(() => {
+                    toast.style.animation = 'slideOutRight 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 2000);
+                
+                // Reset border after 2 seconds
+                setTimeout(() => {
+                    event.target.style.borderColor = '#ddd';
+                    event.target.style.boxShadow = 'none';
+                }, 2000);
             }
         }
 
