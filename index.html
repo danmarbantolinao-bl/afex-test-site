@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFEX Test Site - Automation Testing Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1em;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab:hover {
+            background: #e8e8e8;
+        }
+
+        .nav-tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 24px;
+            background: #667eea;
+            border-radius: 2px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        label.required::after {
+            content: ' *';
+            color: #e74c3c;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        input[type="date"],
+        input[type="time"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        input[type="time"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .input-with-search {
+            position: relative;
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #667eea;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
+
+        .search-results.show {
+            display: block;
+        }
+
+        .search-result-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .search-result-item:hover {
+            background: #f0f0f0;
+        }
+
+        /* Checkbox and Radio Styles */
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item,
+        .radio-item {
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .checkbox-item label,
+        .radio-item label {
+            margin-bottom: 0;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 30px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 24px;
+            width: 24px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #667eea;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        button,
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #e8e8e8;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-info {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #2980b9;
+        }
+
+        /* Dropdown Styles */
+        .dropdown-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .dropdown-select {
+            appearance: none;
+            padding-right: 30px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23667eea' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 40px;
+        }
+
+        /* Image Upload */
+        .image-upload-container {
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+        }
+
+        .image-upload-container:hover {
+            background: #f0f0ff;
+            border-color: #764ba2;
+        }
+
+        .image-upload-container input[type="file"] {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .image-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .image-item-label {
+            padding: 8px;
+            background: #667eea;
+            color: white;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        /* Modal/Popup */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            color: #333;
+            margin: 0;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        /* Business Hours */
+        .business-hours-container {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .time-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr auto;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .time-row label {
+            margin-bottom: 0;
+            grid-column: 1;
+        }
+
+        .split-hours-btn,
+        .hide-hours-btn {
+            padding: 8px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .split-hours-btn:hover,
+        .hide-hours-btn:hover {
+            background: #2980b9;
+        }
+
+        /* Payment Methods */
+        .payment-methods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .payment-card {
+            border: 2px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-card:hover {
+            border-color: #667eea;
+            background: #f9f9ff;
+        }
+
+        .payment-card input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        /* Rich Text Editor */
+        .rich-text-toolbar {
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            border-bottom: none;
+            padding: 10px;
+            border-radius: 6px 6px 0 0;
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-btn {
+            padding: 6px 10px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .toolbar-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .rich-text-editor {
+            border: 2px solid #ddd;
+            border-radius: 0 0 6px 6px;
+            min-height: 200px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .tab-content {
+                padding: 20px;
+            }
+
+            .time-row {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-methods-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Test Type Badge */
+        .test-type {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-left: 10px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 AFEX Test Site</h1>
+            <p>Comprehensive Automation Testing Platform</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('signup')">Signup Form</button>
+            <button class="nav-tab" onclick="switchTab('listing')">Add Listing</button>
+            <button class="nav-tab" onclick="switchTab('components')">Test Components</button>
+        </div>
+
+        <!-- SIGNUP TAB -->
+        <div id="signup" class="tab-content active">
+            <div class="success-message" id="signupSuccess">✓ Signup successful! Welcome aboard.</div>
+
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                <div class="form-section">
+                    <h2 class="section-title">Account Information <span class="test-type">FILL</span></h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName" class="required">First Name</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="John" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName" class="required">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="signupEmail" class="required">Email Address</label>
+                            <input type="email" id="signupEmail" name="signupEmail" placeholder="john@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPassword" class="required">Password</label>
+                            <input type="password" id="signupPassword" name="signupPassword" placeholder="••••••••" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="text" id="phone" name="phone" placeholder="+1 (555) 000-0000">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="section-title">Account Type <span class="test-type">RADIO BUTTON</span></h2>
+                    
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="individual" name="accountType" value="individual" checked>
+                            <label for="individual">Individual</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="business" name="accountType" value="business">
+                            <label for="business">Business</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="enterprise" name="accountType" value="enterprise">
+                            <label for="enterprise">Enterprise</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="section-title">Preferences <span class="test-type">CHECKBOX</span></h2>
+                    
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="newsletter" name="newsletter" value="newsletter">
+                            <label for="newsletter">Subscribe to our newsletter</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="updates" name="updates" value="updates">
+                            <label for="updates">Receive product updates</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="terms" name="terms" value="terms" required>
+                            <label for="terms">I agree to the Terms and Conditions</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="section-title">Country <span class="test-type">DROPDOWN</span></h2>
+                    
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="country" class="required">Select Country</label>
+                            <select id="country" name="country" required>
+                                <option value="">-- Select a Country --</option>
+                                <option value="usa">United States</option>
+                                <option value="canada">Canada</option>
+                                <option value="uk">United Kingdom</option>
+                                <option value="australia">Australia</option>
+                                <option value="philippines">Philippines</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">Create Account</button>
+                    <button type="reset" class="btn btn-secondary">Clear Form</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- ADD LISTING TAB -->
+        <div id="listing" class="tab-content">
+            <div class="success-message" id="listingSuccess">✓ Listing created successfully!</div>
+
+            <form id="listingForm" onsubmit="handleListing(event)">
+                <!-- BUSINESS INFORMATION -->
+                <div class="form-section">
+                    <h2 class="section-title">Business Information <span class="test-type">FILL</span></h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="businessName" class="required">Business Name</label>
+                            <input type="text" id="businessName" name="businessName" placeholder="Your Business Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="businessType" class="required">Business Type</label>
+                            <select id="businessType" name="businessType" required>
+                                <option value="">-- Select Type --</option>
+                                <option value="restaurant">Restaurant</option>
+                                <option value="retail">Retail</option>
+                                <option value="services">Services</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="businessEmail">Business Email</label>
+                            <input type="email" id="businessEmail" name="businessEmail" placeholder="business@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="businessPhone">Business Phone</label>
+                            <input type="text" id="businessPhone" name="businessPhone" placeholder="+1 (555) 000-0000">
+                        </div>
+                    </div>
+
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="businessDescription">Description</label>
+                            <textarea id="businessDescription" name="businessDescription" placeholder="Describe your business..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BUSINESS HOURS -->
+                <div class="form-section">
+                    <h2 class="section-title">Business Hours <span class="test-type">FILL & CLICK</span></h2>
+                    
+                    <div class="checkbox-group" style="margin-bottom: 15px;">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="acceptSplit" name="acceptSplit" value="split">
+                            <label for="acceptSplit">Accept Split Hours</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="acceptHide" name="acceptHide" value="hide">
+                            <label for="acceptHide">Accept Hide/Skip Hours</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="acceptOverlap" name="acceptOverlap" value="overlap">
+                            <label for="acceptOverlap">Accept Overlap Hours</label>
+                        </div>
+                    </div>
+
+                    <div class="business-hours-container">
+                        <div class="time-row">
+                            <label>Monday</label>
+                            <input type="time" name="monOpen" value="09:00">
+                            <input type="time" name="monClose" value="17:00">
+                            <button type="button" class="split-hours-btn" onclick="handleSplitHours(this)">Split</button>
+                        </div>
+                        <div class="time-row">
+                            <label>Tuesday</label>
+                            <input type="time" name="tueOpen" value="09:00">
+                            <input type="time" name="tueClose" value="17:00">
+                            <button type="button" class="hide-hours-btn" onclick="handleHideHours(this)">Hide</button>
+                        </div>
+                        <div class="time-row">
+                            <label>Wednesday</label>
+                            <input type="time" name="wedOpen" value="09:00">
+                            <input type="time" name="wedClose" value="17:00">
+                            <button type="button" class="split-hours-btn" onclick="handleSplitHours(this)">Split</button>
+                        </div>
+                        <div class="time-row">
+                            <label>Thursday</label>
+                            <input type="time" name="thuOpen" value="09:00">
+                            <input type="time" name="thuClose" value="17:00">
+                            <button type="button" class="hide-hours-btn" onclick="handleHideHours(this)">Hide</button>
+                        </div>
+                        <div class="time-row">
+                            <label>Friday</label>
+                            <input type="time" name="friOpen" value="09:00">
+                            <input type="time" name="friClose" value="17:00">
+                            <button type="button" class="split-hours-btn" onclick="handleSplitHours(this)">Split</button>
+                        </div>
+                        <div class="time-row">
+                            <label>Saturday</label>
+                            <input type="time" name="satOpen" value="10:00">
+                            <input type="time" name="satClose" value="14:00">
+                            <button type="button" class="hide-hours-btn" onclick="handleHideHours(this)">Hide</button>
+                        </div>
+                        <div class="time-row">
+                            <label>Sunday</label>
+                            <input type="checkbox" name="sunClosed" id="sunClosed">
+                            <label for="sunClosed" style="margin-bottom: 0;">Closed</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IMAGES -->
+                <div class="form-section">
+                    <h2 class="section-title">Business Images <span class="test-type">UPLOAD & DISPLAY</span></h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Logo</label>
+                            <div class="image-upload-container" onclick="document.getElementById('logoUpload').click()">
+                                <div class="upload-icon">📸</div>
+                                <p>Click to upload Logo</p>
+                                <input type="file" id="logoUpload" name="logo" accept="image/*" onchange="handleImageUpload(this, 'logo')">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Photo 1</label>
+                            <div class="image-upload-container" onclick="document.getElementById('photo1Upload').click()">
+                                <div class="upload-icon">📸</div>
+                                <p>Click to upload Photo 1</p>
+                                <input type="file" id="photo1Upload" name="photo1" accept="image/*" onchange="handleImageUpload(this, 'photo1')">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Photo 2</label>
+                            <div class="image-upload-container" onclick="document.getElementById('photo2Upload').click()">
+                                <div class="upload-icon">📸</div>
+                                <p>Click to upload Photo 2</p>
+                                <input type="file" id="photo2Upload" name="photo2" accept="image/*" onchange="handleImageUpload(this, 'photo2')">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Photo 3</label>
+                            <div class="image-upload-container" onclick="document.getElementById('photo3Upload').click()">
+                                <div class="upload-icon">📸</div>
+                                <p>Click to upload Photo 3</p>
+                                <input type="file" id="photo3Upload" name="photo3" accept="image/*" onchange="handleImageUpload(this, 'photo3')">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="imageGallery" class="image-gallery"></div>
+                </div>
+
+                <!-- PAYMENT METHODS -->
+                <div class="form-section">
+                    <h2 class="section-title">Accepted Payment Methods <span class="test-type">CHECKBOX & FILL</span></h2>
+                    
+                    <div class="payment-methods-grid">
+                        <div class="payment-card">
+                            <input type="checkbox" name="payment" value="cash" id="cash">
+                            <label for="cash" style="margin: 0;">💵 Cash</label>
+                        </div>
+                        <div class="payment-card">
+                            <input type="checkbox" name="payment" value="check" id="check">
+                            <label for="check" style="margin: 0;">✓ Personal Check</label>
+                        </div>
+                        <div class="payment-card">
+                            <input type="checkbox" name="payment" value="visa" id="visa">
+                            <label for="visa" style="margin: 0;">💳 Visa</label>
+                        </div>
+                        <div class="payment-card">
+                            <input type="checkbox" name="payment" value="mastercard" id="mastercard">
+                            <label for="mastercard" style="margin: 0;">💳 Mastercard</label>
+                        </div>
+                        <div class="payment-card">
+                            <input type="checkbox" name="payment" value="amex" id="amex">
+                            <label for="amex" style="margin: 0;">💳 American Express</label>
+                        </div>
+                        <div class="payment-card">
+                            <input type="checkbox" name="payment" value="discover" id="discover">
+                            <label for="discover" style="margin: 0;">💳 Discover</label>
+                        </div>
+                        <div class="payment-card">
+                            <input type="checkbox" name="payment" value="paypal" id="paypal">
+                            <label for="paypal" style="margin: 0;">🅿️ PayPal</label>
+                        </div>
+                        <div class="payment-card">
+                            <input type="checkbox" name="payment" value="debit" id="debit">
+                            <label for="debit" style="margin: 0;">🏧 ATM / Debit</label>
+                        </div>
+                        <div class="payment-card">
+                            <input type="checkbox" name="payment" value="invoice" id="invoice">
+                            <label for="invoice" style="margin: 0;">📄 Invoice</label>
+                        </div>
+                        <div class="payment-card">
+                            <input type="checkbox" name="payment" value="insurance" id="insurance">
+                            <label for="insurance" style="margin: 0;">🛡️ Insurance</label>
+                        </div>
+                        <div class="payment-card">
+                            <input type="checkbox" name="payment" value="financing" id="financing">
+                            <label for="financing" style="margin: 0;">💰 Financing Available</label>
+                        </div>
+                        <div class="payment-card">
+                            <input type="checkbox" name="payment" value="traveler" id="traveler">
+                            <label for="traveler" style="margin: 0;">✈️ Traveler's Checks</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAYMENT DETAILS -->
+                <div class="form-section">
+                    <h2 class="section-title">Payment Processing <span class="test-type">FILL & FIND/CLICK</span></h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="indent">Indent Payment Details</label>
+                            <input type="text" id="indent" name="indent" placeholder="Enter payment indent details">
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentFind">Find and Select Payment Type</label>
+                            <div class="input-with-search">
+                                <input type="text" id="paymentFind" name="paymentFind" placeholder="Type to search..." onkeyup="handlePaymentSearch(this)">
+                                <div class="search-results" id="paymentResults"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="paymentBoxFind">Fill and Select Payment Box</label>
+                            <div class="input-with-search">
+                                <input type="text" id="paymentBoxFind" name="paymentBoxFind" placeholder="Type to search..." onkeyup="handlePaymentBoxSearch(this)">
+                                <div class="search-results" id="paymentBoxResults"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="findAndClick">Find and Click Payment Button</label>
+                            <div class="input-with-search">
+                                <input type="text" id="findAndClick" name="findAndClick" placeholder="Type to search..." onkeyup="handleClickSearch(this)">
+                                <div class="search-results" id="clickResults"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RICH TEXT EDITOR -->
+                <div class="form-section">
+                    <h2 class="section-title">Additional Information <span class="test-type">TEXT & FROALA</span></h2>
+                    
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label>Plain Text (No Froala)</label>
+                            <textarea id="plainText" name="plainText" placeholder="Enter plain text information..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label>Rich Text Editor (Froala-like)</label>
+                            <div class="rich-text-toolbar">
+                                <button type="button" class="toolbar-btn" title="Bold" onclick="execCommand('bold')">B</button>
+                                <button type="button" class="toolbar-btn" title="Italic" onclick="execCommand('italic')"><i>I</i></button>
+                                <button type="button" class="toolbar-btn" title="Underline" onclick="execCommand('underline')"><u>U</u></button>
+                                <button type="button" class="toolbar-btn" title="Heading" onclick="execCommand('formatBlock', '<h2>')">H2</button>
+                                <button type="button" class="toolbar-btn" title="Bullet List" onclick="execCommand('insertUnordedList')">• List</button>
+                                <button type="button" class="toolbar-btn" title="Link" onclick="insertLink()">Link</button>
+                            </div>
+                            <div class="rich-text-editor" id="richTextEditor" contenteditable="true"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACTION BUTTONS -->
+                <div class="button-group">
+                    <button type="button" class="btn btn-info" onclick="openPreviewModal()">Preview Listing</button>
+                    <button type="submit" class="btn btn-success">Publish Listing</button>
+                    <button type="reset" class="btn btn-secondary">Clear Form</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- TEST COMPONENTS TAB -->
+        <div id="components" class="tab-content">
+            <h2 class="section-title">Interactive Test Components <span class="test-type">ALL TYPES</span></h2>
+            
+            <div class="form-section">
+                <h3 style="margin-bottom: 15px;">Toggle Switch Test <span class="test-type">TOGGLE</span></h3>
+                <label style="display: flex; align-items: center; gap: 15px; margin-bottom: 0;">
+                    Enable Feature:
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="featureToggle">
+                        <span class="toggle-slider"></span>
+                    </div>
+                </label>
+            </div>
+
+            <div class="form-section">
+                <h3 style="margin-bottom: 15px;">Dropdown Variations <span class="test-type">DROPDOWN</span></h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="simple-dropdown">Simple Dropdown (No Search)</label>
+                        <select id="simple-dropdown" name="simpleDropdown">
+                            <option value="">Select an option</option>
+                            <option value="option1">Option 1</option>
+                            <option value="option2">Option 2</option>
+                            <option value="option3">Option 3</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="search-dropdown">Searchable Dropdown</label>
+                        <div class="input-with-search">
+                            <input type="text" id="search-dropdown" placeholder="Search..." onkeyup="handleDropdownSearch(this)">
+                            <div class="search-results" id="dropdownResults"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dropdown-with-textbox">Dropdown with Textbox (Fill & Select)</label>
+                        <div class="input-with-search">
+                            <input type="text" id="dropdown-with-textbox" placeholder="Type and select..." onkeyup="handleFillSelect(this)">
+                            <div class="search-results" id="fillSelectResults"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dropdown-enter">Fill & Press Enter</label>
+                        <input type="text" id="dropdown-enter" placeholder="Type and press Enter..." onkeypress="handleEnterKey(event)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 style="margin-bottom: 15px;">Button Types <span class="test-type">CLICK</span></h3>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="showAlert('Primary Button Clicked!')">Primary Button</button>
+                    <button class="btn btn-secondary" onclick="showAlert('Secondary Button Clicked!')">Secondary Button</button>
+                    <button class="btn btn-success" onclick="showAlert('Success Button Clicked!')">Success Button</button>
+                    <button class="btn btn-danger" onclick="showAlert('Danger Button Clicked!')">Danger Button</button>
+                    <button class="btn btn-info" onclick="showAlert('Info Button Clicked!')">Info Button</button>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 style="margin-bottom: 15px;">Modal/Popup Test <span class="test-type">POPUP</span></h3>
+                <button class="btn btn-primary" onclick="openModal()">Open Modal</button>
+            </div>
+
+            <div class="form-section">
+                <h3 style="margin-bottom: 15px;">Find and Click Simulation <span class="test-type">FIND & CLICK</span></h3>
+                <div class="form-group">
+                    <label for="findInput">Find and Click Test</label>
+                    <div class="input-with-search">
+                        <input type="text" id="findInput" placeholder="Type to find items..." onkeyup="handleFindClick(this)">
+                        <div class="search-results" id="findClickResults"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content" style="position: relative;">
+            <span class="modal-close" onclick="closeModal('previewModal')">×</span>
+            <div class="modal-header">
+                <h2>Listing Preview</h2>
+            </div>
+            <div id="previewContent" style="max-height: 400px; overflow-y: auto;"></div>
+            <div class="button-group" style="margin-top: 20px;">
+                <button class="btn btn-primary" onclick="closeModal('previewModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="testModal" class="modal">
+        <div class="modal-content" style="position: relative;">
+            <span class="modal-close" onclick="closeModal('testModal')">×</span>
+            <div class="modal-header">
+                <h2>Test Modal / Popup</h2>
+            </div>
+            <p>This is a test modal/popup for automation testing. You can interact with elements inside this modal.</p>
+            <div class="form-group">
+                <label for="modalInput">Test Input</label>
+                <input type="text" id="modalInput" placeholder="Type something here...">
+            </div>
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="modalCheckbox" value="test">
+                    <label for="modalCheckbox">Modal Checkbox</label>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-success" onclick="handleModalAction()">Confirm</button>
+                <button class="btn btn-secondary" onclick="closeModal('testModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const navTabs = document.querySelectorAll('.nav-tab');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            navTabs.forEach(tab => tab.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Modal functions
+        function openModal() {
+            document.getElementById('testModal').classList.add('show');
+        }
+
+        function openPreviewModal() {
+            const preview = generatePreview();
+            document.getElementById('previewContent').innerHTML = preview;
+            document.getElementById('previewModal').classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function generatePreview() {
+            const businessName = document.getElementById('businessName').value || 'N/A';
+            const businessType = document.getElementById('businessType').value || 'N/A';
+            const payment = Array.from(document.querySelectorAll('input[name="payment"]:checked')).map(el => el.value).join(', ') || 'None selected';
+            
+            return `
+                <h3>${businessName}</h3>
+                <p><strong>Type:</strong> ${businessType}</p>
+                <p><strong>Payment Methods:</strong> ${payment}</p>
+            `;
+        }
+
+        // Signup form
+        function handleSignup(event) {
+            event.preventDefault();
+            const successMsg = document.getElementById('signupSuccess');
+            successMsg.classList.add('show');
+            setTimeout(() => successMsg.classList.remove('show'), 3000);
+            document.getElementById('signupForm').reset();
+        }
+
+        // Listing form
+        function handleListing(event) {
+            event.preventDefault();
+            const successMsg = document.getElementById('listingSuccess');
+            successMsg.classList.add('show');
+            setTimeout(() => successMsg.classList.remove('show'), 3000);
+        }
+
+        // Image upload
+        function handleImageUpload(input, type) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const gallery = document.getElementById('imageGallery');
+                    const labels = { logo: 'Logo', photo1: 'Photo 1', photo2: 'Photo 2', photo3: 'Photo 3' };
+                    
+                    const item = document.createElement('div');
+                    item.className = 'image-item';
+                    item.innerHTML = `
+                        <img src="${e.target.result}" alt="${labels[type]}">
+                        <div class="image-item-label">${labels[type]}</div>
+                    `;
+                    
+                    // Remove existing item of same type
+                    const existing = gallery.querySelector(`[data-type="${type}"]`);
+                    if (existing) existing.remove();
+                    
+                    item.setAttribute('data-type', type);
+                    gallery.appendChild(item);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Business hours handlers
+        function handleSplitHours(button) {
+            alert('Split Hours feature activated!');
+        }
+
+        function handleHideHours(button) {
+            alert('Hide Hours feature activated!');
+        }
+
+        // Search handlers
+        const paymentOptions = ['Cash', 'Personal Check', 'Visa', 'Mastercard', 'American Express', 'Discover', 'PayPal', 'ATM/Debit', 'Invoice', 'Insurance', 'Financing', 'Traveler Checks'];
+
+        function handlePaymentSearch(input) {
+            const results = document.getElementById('paymentResults');
+            const value = input.value.toLowerCase();
+            
+            if (!value) {
+                results.classList.remove('show');
+                return;
+            }
+            
+            const filtered = paymentOptions.filter(opt => opt.toLowerCase().includes(value));
+            results.innerHTML = filtered.map(opt => `<div class="search-result-item" onclick="selectPayment(this, '${opt}')">${opt}</div>`).join('');
+            results.classList.add('show');
+        }
+
+        function selectPayment(element, value) {
+            document.getElementById('paymentFind').value = value;
+            document.getElementById('paymentResults').classList.remove('show');
+        }
+
+        function handlePaymentBoxSearch(input) {
+            const results = document.getElementById('paymentBoxResults');
+            const value = input.value.toLowerCase();
+            
+            if (!value) {
+                results.classList.remove('show');
+                return;
+            }
+            
+            const filtered = paymentOptions.filter(opt => opt.toLowerCase().includes(value));
+            results.innerHTML = filtered.map(opt => `<div class="search-result-item" onclick="selectPaymentBox(this, '${opt}')">${opt}</div>`).join('');
+            results.classList.add('show');
+        }
+
+        function selectPaymentBox(element, value) {
+            document.getElementById('paymentBoxFind').value = value;
+            document.getElementById('paymentBoxResults').classList.remove('show');
+        }
+
+        function handleClickSearch(input) {
+            const results = document.getElementById('clickResults');
+            const value = input.value.toLowerCase();
+            
+            if (!value) {
+                results.classList.remove('show');
+                return;
+            }
+            
+            const filtered = paymentOptions.filter(opt => opt.toLowerCase().includes(value));
+            results.innerHTML = filtered.map(opt => `<div class="search-result-item" onclick="handleClickAction(this, '${opt}')">${opt}</div>`).join('');
+            results.classList.add('show');
+        }
+
+        function handleClickAction(element, value) {
+            document.getElementById('findAndClick').value = value;
+            alert('Clicked: ' + value);
+            document.getElementById('clickResults').classList.remove('show');
+        }
+
+        function handleDropdownSearch(input) {
+            const results = document.getElementById('dropdownResults');
+            const options = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry'];
+            const value = input.value.toLowerCase();
+            
+            if (!value) {
+                results.classList.remove('show');
+                return;
+            }
+            
+            const filtered = options.filter(opt => opt.toLowerCase().includes(value));
+            results.innerHTML = filtered.map(opt => `<div class="search-result-item" onclick="selectDropdown(this, '${opt}')">${opt}</div>`).join('');
+            results.classList.add('show');
+        }
+
+        function selectDropdown(element, value) {
+            document.getElementById('search-dropdown').value = value;
+            document.getElementById('dropdownResults').classList.remove('show');
+        }
+
+        function handleFillSelect(input) {
+            const results = document.getElementById('fillSelectResults');
+            const options = ['Product A', 'Product B', 'Product C', 'Product D'];
+            const value = input.value.toLowerCase();
+            
+            if (!value) {
+                results.classList.remove('show');
+                return;
+            }
+            
+            const filtered = options.filter(opt => opt.toLowerCase().includes(value));
+            results.innerHTML = filtered.map(opt => `<div class="search-result-item" onclick="selectFillSelect(this, '${opt}')">${opt}</div>`).join('');
+            results.classList.add('show');
+        }
+
+        function selectFillSelect(element, value) {
+            document.getElementById('dropdown-with-textbox').value = value;
+            document.getElementById('fillSelectResults').classList.remove('show');
+        }
+
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                alert('Enter pressed with value: ' + event.target.value);
+            }
+        }
+
+        function handleFindClick(input) {
+            const results = document.getElementById('findClickResults');
+            const items = ['Item Alpha', 'Item Beta', 'Item Gamma', 'Item Delta'];
+            const value = input.value.toLowerCase();
+            
+            if (!value) {
+                results.classList.remove('show');
+                return;
+            }
+            
+            const filtered = items.filter(item => item.toLowerCase().includes(value));
+            results.innerHTML = filtered.map(item => `<div class="search-result-item" onclick="clickFindItem(this, '${item}')">${item}</div>`).join('');
+            results.classList.add('show');
+        }
+
+        function clickFindItem(element, value) {
+            document.getElementById('findInput').value = value;
+            alert('Found and clicked: ' + value);
+            document.getElementById('findClickResults').classList.remove('show');
+        }
+
+        // Rich text editor
+        function execCommand(command, value = null) {
+            document.execCommand(command, false, value);
+            document.getElementById('richTextEditor').focus();
+        }
+
+        function insertLink() {
+            const url = prompt('Enter URL:');
+            if (url) {
+                document.execCommand('createLink', false, url);
+                document.getElementById('richTextEditor').focus();
+            }
+        }
+
+        function handleModalAction() {
+            alert('Modal action confirmed!');
+            closeModal('testModal');
+        }
+
+        function showAlert(message) {
+            alert(message);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+        }
+
+        // Close search results when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.matches('input[type="text"]')) {
+                document.querySelectorAll('.search-results').forEach(result => {
+                    result.classList.remove('show');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

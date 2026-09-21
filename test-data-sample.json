@@ -1,0 +1,472 @@
+{
+  "signupForm": {
+    "testCases": [
+      {
+        "id": "signup_001",
+        "name": "Valid Signup - Individual",
+        "action": "fill",
+        "data": {
+          "firstName": "John",
+          "lastName": "Doe",
+          "email": "john.doe@example.com",
+          "password": "SecurePass123!",
+          "phone": "+1 (555) 123-4567",
+          "accountType": "individual",
+          "newsletter": true,
+          "updates": true,
+          "terms": true,
+          "country": "usa"
+        },
+        "expectedResult": "success"
+      },
+      {
+        "id": "signup_002",
+        "name": "Valid Signup - Business",
+        "action": "fill",
+        "data": {
+          "firstName": "Jane",
+          "lastName": "Smith",
+          "email": "jane.smith@business.com",
+          "password": "BusinessPass123!",
+          "phone": "+1 (555) 987-6543",
+          "accountType": "business",
+          "newsletter": false,
+          "updates": true,
+          "terms": true,
+          "country": "canada"
+        },
+        "expectedResult": "success"
+      },
+      {
+        "id": "signup_003",
+        "name": "Missing Required Fields",
+        "action": "fill",
+        "data": {
+          "firstName": "Bob",
+          "lastName": "",
+          "email": "bob@example.com",
+          "password": "",
+          "accountType": "individual",
+          "terms": false
+        },
+        "expectedResult": "validation_error"
+      }
+    ]
+  },
+  "listingForm": {
+    "testCases": [
+      {
+        "id": "listing_001",
+        "name": "Complete Restaurant Listing",
+        "actions": ["fill", "click", "upload", "select"],
+        "data": {
+          "businessName": "The Italian Kitchen",
+          "businessType": "restaurant",
+          "businessEmail": "info@italian-kitchen.com",
+          "businessPhone": "+1 (555) 234-5678",
+          "businessDescription": "Authentic Italian restaurant with homemade pasta and traditional recipes.",
+          "businessHours": {
+            "monday": {
+              "open": "11:00",
+              "close": "22:00",
+              "split": false,
+              "hidden": false
+            },
+            "tuesday": {
+              "open": "11:00",
+              "close": "22:00",
+              "split": false,
+              "hidden": false
+            },
+            "wednesday": {
+              "open": "11:00",
+              "close": "22:00",
+              "split": false,
+              "hidden": false
+            },
+            "thursday": {
+              "open": "11:00",
+              "close": "23:00",
+              "split": false,
+              "hidden": false
+            },
+            "friday": {
+              "open": "11:00",
+              "close": "23:00",
+              "split": false,
+              "hidden": false
+            },
+            "saturday": {
+              "open": "12:00",
+              "close": "23:00",
+              "split": false,
+              "hidden": false
+            },
+            "sunday": {
+              "open": "12:00",
+              "close": "21:00",
+              "split": false,
+              "hidden": false
+            }
+          },
+          "images": {
+            "logo": "logo.png",
+            "photo1": "restaurant-interior.jpg",
+            "photo2": "chef-preparing-pasta.jpg",
+            "photo3": "dining-area.jpg"
+          },
+          "acceptedPayments": [
+            "cash",
+            "visa",
+            "mastercard",
+            "amex",
+            "paypal"
+          ],
+          "paymentDetails": {
+            "indent": "Please provide payment details",
+            "acceptInvoice": true,
+            "acceptFinancing": false
+          },
+          "plainText": "Traditional Italian restaurant serving family recipes since 1995.",
+          "richText": "<p>Welcome to <strong>The Italian Kitchen</strong>!</p><p>We serve authentic Italian cuisine prepared by our skilled chefs.</p>"
+        },
+        "expectedResult": "success"
+      },
+      {
+        "id": "listing_002",
+        "name": "Retail Store Listing with Split Hours",
+        "actions": ["fill", "click", "upload"],
+        "data": {
+          "businessName": "Fashion Boutique",
+          "businessType": "retail",
+          "businessEmail": "shop@fashion-boutique.com",
+          "businessPhone": "+1 (555) 345-6789",
+          "businessDescription": "Trendy fashion boutique featuring designer clothes and accessories.",
+          "acceptSplitHours": true,
+          "acceptHideHours": true,
+          "businessHours": {
+            "monday": {
+              "open": "09:00",
+              "close": "13:00",
+              "split": true,
+              "open2": "14:00",
+              "close2": "18:00"
+            },
+            "sunday": {
+              "hidden": true
+            }
+          },
+          "acceptedPayments": [
+            "visa",
+            "mastercard",
+            "amex",
+            "discover",
+            "paypal"
+          ]
+        },
+        "expectedResult": "success"
+      },
+      {
+        "id": "listing_003",
+        "name": "Healthcare Service Listing",
+        "actions": ["fill", "click"],
+        "data": {
+          "businessName": "City Medical Clinic",
+          "businessType": "healthcare",
+          "businessEmail": "appointments@citymedical.com",
+          "businessPhone": "+1 (555) 456-7890",
+          "acceptedPayments": [
+            "visa",
+            "mastercard",
+            "insurance",
+            "invoice"
+          ],
+          "paymentDetails": {
+            "acceptInsurance": true,
+            "acceptInvoice": true,
+            "acceptFinancing": true
+          }
+        },
+        "expectedResult": "success"
+      }
+    ]
+  },
+  "testElements": {
+    "fillTests": [
+      {
+        "type": "fill",
+        "selector": "#firstName",
+        "value": "John",
+        "description": "Fill first name field"
+      },
+      {
+        "type": "fill",
+        "selector": "#businessName",
+        "value": "Test Business",
+        "description": "Fill business name"
+      },
+      {
+        "type": "fill_select",
+        "selector": "#country",
+        "searchValue": "United",
+        "selectValue": "usa",
+        "description": "Fill and select country"
+      },
+      {
+        "type": "fill_enter",
+        "selector": "#dropdown-enter",
+        "value": "test value",
+        "key": "Enter",
+        "description": "Fill field and press Enter"
+      }
+    ],
+    "clickTests": [
+      {
+        "type": "click",
+        "selector": "button.btn-primary",
+        "description": "Click primary button"
+      },
+      {
+        "type": "click_radio",
+        "selector": "#individual",
+        "description": "Click radio button"
+      },
+      {
+        "type": "click_checkbox",
+        "selector": "#newsletter",
+        "description": "Click checkbox"
+      },
+      {
+        "type": "find_click",
+        "searchField": "#paymentFind",
+        "searchValue": "Visa",
+        "description": "Find Visa in payment options and click"
+      }
+    ],
+    "dropdownTests": [
+      {
+        "type": "simple_dropdown",
+        "selector": "#country",
+        "value": "usa",
+        "description": "Select from simple dropdown"
+      },
+      {
+        "type": "searchable_dropdown",
+        "selector": "#search-dropdown",
+        "searchValue": "app",
+        "selectValue": "Apple",
+        "description": "Search and select from dropdown"
+      },
+      {
+        "type": "fill_and_select",
+        "selector": "#dropdown-with-textbox",
+        "value": "Product A",
+        "description": "Fill field and select matching result"
+      }
+    ],
+    "modalTests": [
+      {
+        "type": "open_modal",
+        "triggerSelector": "button[onclick*='openModal']",
+        "modalSelector": "#testModal",
+        "description": "Open test modal"
+      },
+      {
+        "type": "modal_interaction",
+        "modalSelector": "#testModal",
+        "actions": [
+          {
+            "type": "fill",
+            "selector": "#modalInput",
+            "value": "test value"
+          },
+          {
+            "type": "click",
+            "selector": ".btn-success"
+          }
+        ],
+        "description": "Interact with modal content"
+      },
+      {
+        "type": "close_modal",
+        "modalSelector": "#testModal",
+        "closeSelector": ".modal-close",
+        "description": "Close modal"
+      }
+    ],
+    "imageTests": [
+      {
+        "type": "image_upload",
+        "selector": "#logoUpload",
+        "fileName": "logo.png",
+        "elementType": "logo",
+        "description": "Upload business logo"
+      },
+      {
+        "type": "image_upload",
+        "selector": "#photo1Upload",
+        "fileName": "photo1.jpg",
+        "elementType": "photo1",
+        "description": "Upload photo 1"
+      }
+    ]
+  },
+  "paymentMethods": [
+    {
+      "id": "cash",
+      "name": "Cash",
+      "icon": "💵",
+      "requiresDetails": false
+    },
+    {
+      "id": "check",
+      "name": "Personal Check",
+      "icon": "✓",
+      "requiresDetails": true
+    },
+    {
+      "id": "visa",
+      "name": "Visa",
+      "icon": "💳",
+      "requiresDetails": true
+    },
+    {
+      "id": "mastercard",
+      "name": "Mastercard",
+      "icon": "💳",
+      "requiresDetails": true
+    },
+    {
+      "id": "amex",
+      "name": "American Express",
+      "icon": "💳",
+      "requiresDetails": true
+    },
+    {
+      "id": "discover",
+      "name": "Discover",
+      "icon": "💳",
+      "requiresDetails": true
+    },
+    {
+      "id": "paypal",
+      "name": "PayPal",
+      "icon": "🅿️",
+      "requiresDetails": true
+    },
+    {
+      "id": "debit",
+      "name": "ATM / Debit",
+      "icon": "🏧",
+      "requiresDetails": true
+    },
+    {
+      "id": "invoice",
+      "name": "Invoice",
+      "icon": "📄",
+      "requiresDetails": true
+    },
+    {
+      "id": "insurance",
+      "name": "Insurance",
+      "icon": "🛡️",
+      "requiresDetails": true
+    },
+    {
+      "id": "financing",
+      "name": "Financing Available",
+      "icon": "💰",
+      "requiresDetails": true
+    },
+    {
+      "id": "traveler",
+      "name": "Traveler's Checks",
+      "icon": "✈️",
+      "requiresDetails": true
+    }
+  ],
+  "businessTypes": [
+    {
+      "id": "restaurant",
+      "name": "Restaurant",
+      "description": "Food service establishment"
+    },
+    {
+      "id": "retail",
+      "name": "Retail",
+      "description": "Retail store or shop"
+    },
+    {
+      "id": "services",
+      "name": "Services",
+      "description": "Service-based business"
+    },
+    {
+      "id": "healthcare",
+      "name": "Healthcare",
+      "description": "Medical or healthcare provider"
+    },
+    {
+      "id": "other",
+      "name": "Other",
+      "description": "Other type of business"
+    }
+  ],
+  "countries": [
+    {
+      "id": "usa",
+      "name": "United States",
+      "code": "US"
+    },
+    {
+      "id": "canada",
+      "name": "Canada",
+      "code": "CA"
+    },
+    {
+      "id": "uk",
+      "name": "United Kingdom",
+      "code": "UK"
+    },
+    {
+      "id": "australia",
+      "name": "Australia",
+      "code": "AU"
+    },
+    {
+      "id": "philippines",
+      "name": "Philippines",
+      "code": "PH"
+    }
+  ],
+  "automationConfig": {
+    "actionTypes": [
+      "Fill",
+      "Click",
+      "GoTo",
+      "Wait For Popup",
+      "Separator"
+    ],
+    "fillTypes": [
+      "From Value Key (Firestore)",
+      "User Input",
+      "Fill to Select",
+      "Fill and Enter",
+      "Required with Fallback - Alternative Key",
+      "Required with Fallback - Direct Value"
+    ],
+    "clickTypes": [
+      "Can Skip",
+      "Find and Click",
+      "Required"
+    ],
+    "logicalExpressions": [
+      "Is empty",
+      "Value is Exactly",
+      "Value Contains",
+      "Greater than",
+      "Less than",
+      "Is Skip"
+    ]
+  }
+}
