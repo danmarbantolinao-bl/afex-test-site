@@ -1252,12 +1252,16 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="search-dropdown">Searchable Dropdown
+                        <label for="search-dropdown">Searchable Dropdown <span class="test-type">MULTI-SELECT</span>
                             <span class="info-icon" title="Options: Apple, Banana, Cherry, Date, Elderberry">ℹ️</span>
                         </label>
                         <div class="input-with-search">
                             <input type="text" id="search-dropdown" placeholder="Search..." onkeyup="handleDropdownSearch(this)">
                             <div class="search-results" id="dropdownResults"></div>
+                        </div>
+                        <div id="dropdownDisplay" style="margin-top: 10px; padding: 10px; background: #f5f5f5; border-radius: 6px; display: none; border-left: 4px solid #9b59b6;">
+                            <small style="color: #666; display: block; margin-bottom: 8px;">Selected Items:</small>
+                            <div id="dropdownList" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
                         </div>
                     </div>
                 </div>
@@ -1543,7 +1547,33 @@
         }
 
         function selectDropdown(element, value) {
-            document.getElementById('search-dropdown').value = value;
+            const listContainer = document.getElementById('dropdownList');
+            const display = document.getElementById('dropdownDisplay');
+            
+            let selectedArray = Array.from(listContainer.querySelectorAll('.selected-tag')).map(tag => 
+                tag.textContent.replace('×', '').trim()
+            );
+            
+            if (selectedArray.includes(value)) {
+                selectedArray = selectedArray.filter(item => item !== value);
+            } else {
+                selectedArray.push(value);
+            }
+            
+            if (selectedArray.length > 0) {
+                listContainer.innerHTML = selectedArray.map(item => 
+                    `<span class="selected-tag" style="border-color: #9b59b6; color: #9b59b6; background: #f5f0fa;">
+                        ${item}
+                        <button class="remove-btn" onclick="removeTag(this, 'dropdown')">×</button>
+                    </span>`
+                ).join('');
+                display.style.display = 'block';
+            } else {
+                listContainer.innerHTML = '';
+                display.style.display = 'none';
+            }
+            
+            document.getElementById('search-dropdown').value = '';
             document.getElementById('dropdownResults').classList.remove('show');
         }
 
@@ -1854,6 +1884,9 @@
             document.getElementById('businessPhone').value = '';
             document.getElementById('businessDescription').value = '';
             
+            // Clear indent payment details
+            document.getElementById('indent').value = '';
+            
             // Clear business hours
             const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
             days.forEach(day => {
@@ -1867,8 +1900,8 @@
                 }
             });
             
-            // Clear payment methods
-            document.querySelectorAll('input[name="paymentMethod"]').forEach(checkbox => {
+            // Clear payment methods checkboxes
+            document.querySelectorAll('input[name="payment"]').forEach(checkbox => {
                 checkbox.checked = false;
             });
             
@@ -1879,35 +1912,53 @@
             document.getElementById('richTextEditor').innerHTML = '';
             
             // Clear image uploads and remove previews
-            ['logo', 'photo1', 'photo2', 'photo3'].forEach(uploadId => {
-                document.getElementById(uploadId + 'Upload').value = '';
-                const previewId = uploadId + 'Preview';
-                const previewElement = document.getElementById(previewId);
-                if (previewElement) {
-                    previewElement.innerHTML = '';
-                    previewElement.style.display = 'none';
+            ['logoUpload', 'photo1Upload', 'photo2Upload', 'photo3Upload'].forEach(uploadId => {
+                const input = document.getElementById(uploadId);
+                if (input) {
+                    input.value = '';
                 }
             });
             
+            // Clear image gallery completely
+            const gallery = document.getElementById('imageGallery');
+            if (gallery) {
+                gallery.innerHTML = '';
+            }
+            
             // Clear fill & select display
-            document.getElementById('fillSelectDisplay').innerHTML = '';
-            document.getElementById('fillSelectList').innerHTML = '';
+            const fillSelectDisplay = document.getElementById('fillSelectDisplay');
+            const fillSelectList = document.getElementById('fillSelectList');
+            if (fillSelectDisplay) {
+                fillSelectDisplay.style.display = 'none';
+                fillSelectList.innerHTML = '';
+            }
             
             // Clear search fields
             document.getElementById('paymentFind').value = '';
             document.getElementById('paymentBoxFind').value = '';
             
             // Clear payment selections and displays
-            document.getElementById('paymentDisplay').style.display = 'none';
-            document.getElementById('paymentList').innerHTML = '';
-            document.getElementById('paymentBoxDisplay').style.display = 'none';
-            document.getElementById('paymentBoxList').innerHTML = '';
+            const paymentDisplay = document.getElementById('paymentDisplay');
+            const paymentList = document.getElementById('paymentList');
+            if (paymentDisplay) paymentDisplay.style.display = 'none';
+            if (paymentList) paymentList.innerHTML = '';
+            
+            const paymentBoxDisplay = document.getElementById('paymentBoxDisplay');
+            const paymentBoxList = document.getElementById('paymentBoxList');
+            if (paymentBoxDisplay) paymentBoxDisplay.style.display = 'none';
+            if (paymentBoxList) paymentBoxList.innerHTML = '';
             
             // Clear result dropdowns
-            document.getElementById('paymentResults').classList.remove('show');
-            document.getElementById('paymentResults').innerHTML = '';
-            document.getElementById('paymentBoxResults').classList.remove('show');
-            document.getElementById('paymentBoxResults').innerHTML = '';
+            const paymentResults = document.getElementById('paymentResults');
+            const paymentBoxResults = document.getElementById('paymentBoxResults');
+            if (paymentResults) {
+                paymentResults.classList.remove('show');
+                paymentResults.innerHTML = '';
+            }
+            if (paymentBoxResults) {
+                paymentBoxResults.classList.remove('show');
+                paymentBoxResults.innerHTML = '';
+            }
         }
 
         function clearComponentsTab() {
@@ -1928,6 +1979,13 @@
             document.getElementById('dropdown-with-textbox').value = '';
             document.getElementById('fillSelectDisplay').style.display = 'none';
             document.getElementById('fillSelectList').innerHTML = '';
+            
+            // Clear searchable dropdown
+            document.getElementById('search-dropdown').value = '';
+            document.getElementById('dropdownDisplay').style.display = 'none';
+            document.getElementById('dropdownList').innerHTML = '';
+            document.getElementById('dropdownResults').classList.remove('show');
+            document.getElementById('dropdownResults').innerHTML = '';
         }
 
         // Close modal when clicking outside
