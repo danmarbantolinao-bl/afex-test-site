@@ -1143,6 +1143,102 @@
         .tab-content:not(.active) .floating-clear-btn {
             display: none;
         }
+
+        /* Floating Navigation Buttons */
+        .floating-nav {
+            position: fixed;
+            bottom: 140px;
+            right: 30px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+            animation: slideUp 0.3s ease;
+        }
+
+        .floating-nav.show {
+            display: flex;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .floating-nav-btn {
+            padding: 12px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            width: 180px;
+            text-align: center;
+        }
+
+        .floating-nav-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(-3px);
+        }
+
+        .floating-nav-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .floating-nav-btn:active {
+            transform: translateX(0);
+        }
+
+        /* Tab-specific colors for floating nav */
+        .floating-nav-btn:nth-child(1) {
+            border-color: #27ae60;
+            color: #27ae60;
+        }
+
+        .floating-nav-btn:nth-child(1):hover,
+        .floating-nav-btn:nth-child(1).active {
+            background: #27ae60;
+            color: white;
+            border-color: #27ae60;
+        }
+
+        .floating-nav-btn:nth-child(2) {
+            border-color: #3498db;
+            color: #3498db;
+        }
+
+        .floating-nav-btn:nth-child(2):hover,
+        .floating-nav-btn:nth-child(2).active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .floating-nav-btn:nth-child(3) {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .floating-nav-btn:nth-child(3):hover,
+        .floating-nav-btn:nth-child(3).active {
+            background: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
     </style>
 </head>
 <body>
@@ -1693,6 +1789,13 @@
             <p>Danmar Bantolinao - Optimization QA & Dev Support</p>
             <p>Danz - AFEX Test Site © 2026 | All Rights Reserved</p>
         </div>
+    </div>
+
+    <!-- Floating Navigation Buttons -->
+    <div class="floating-nav" id="floatingNav">
+        <button class="floating-nav-btn active" onclick="switchTab('signup')">📋 Signup Form</button>
+        <button class="floating-nav-btn" onclick="switchTab('listing')">📝 Add Listing</button>
+        <button class="floating-nav-btn" onclick="switchTab('components')">🧪 Test Components</button>
     </div>
 
     <script>
@@ -2324,6 +2427,46 @@
                 });
             }
         });
+
+        // Floating Navigation Buttons Logic
+        function handleFloatingNav() {
+            const navTabs = document.querySelector('.nav-tabs');
+            const floatingNav = document.getElementById('floatingNav');
+            const navTabsRect = navTabs.getBoundingClientRect();
+            
+            // Show floating nav if original nav-tabs is out of view
+            if (navTabsRect.bottom < 0 || navTabsRect.top > window.innerHeight) {
+                floatingNav.classList.add('show');
+            } else {
+                floatingNav.classList.remove('show');
+            }
+            
+            // Update active state based on current active tab
+            const activeTab = document.querySelector('.tab-content.active');
+            const activeTabName = activeTab ? activeTab.id : 'signup';
+            
+            document.querySelectorAll('.floating-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            const activeButton = document.querySelector(`.floating-nav-btn[onclick="switchTab('${activeTabName}')"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
+        
+        // Listen to scroll events
+        window.addEventListener('scroll', handleFloatingNav);
+        
+        // Initial check
+        document.addEventListener('DOMContentLoaded', handleFloatingNav);
+        
+        // Also handle tab switching to update floating nav active state
+        const originalSwitchTab = switchTab;
+        switchTab = function(tabName) {
+            originalSwitchTab(tabName);
+            handleFloatingNav();
+        }
     </script>
 </body>
 </html>
