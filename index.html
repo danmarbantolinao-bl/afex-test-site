@@ -765,12 +765,70 @@
         .footer a:hover {
             text-decoration: underline;
         }
+
+        /* Removable Tags/Badges */
+        .selected-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .selected-tag.payment {
+            border-color: #ff9800;
+            color: #ff9800;
+            background: #fff8f0;
+        }
+
+        .selected-tag.payment-box {
+            border-color: #e74c3c;
+            color: #e74c3c;
+            background: #fff0f0;
+        }
+
+        .selected-tag.product {
+            border-color: #27ae60;
+            color: #27ae60;
+            background: #f0fffb;
+        }
+
+        .selected-tag.enter {
+            border-color: #3498db;
+            color: #3498db;
+            background: #f0f8ff;
+        }
+
+        .selected-tag .remove-btn {
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1em;
+            line-height: 1;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: transparent;
+            border: none;
+            color: inherit;
+            transition: transform 0.2s ease;
+        }
+
+        .selected-tag .remove-btn:hover {
+            transform: scale(1.2);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1><img src="afex_heart.gif" alt="AFEX Logo" style="height: 40px; width: auto; vertical-align: middle; margin-right: 10px;"> Danz - AFEX Test Site <img src="afex_heart.gif" alt="AFEX Logo" style="height: 40px; width: auto; vertical-align: middle; margin-right: 10px;"></h1>
+            <h1><img src="afex_heart.gif" alt="AFEX Logo" style="height: 40px; width: auto; vertical-align: middle; margin-right: 10px;"> Danz - AFEX Test Site</h1>
             <p>Comprehensive Automation Testing Platform</p>
         </div>
 
@@ -791,18 +849,18 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="firstName" class="required">First Name</label>
-                            <input type="text" id="firstName" name="firstName" placeholder="Danmar" required>
+                            <input type="text" id="firstName" name="firstName" placeholder="John" required>
                         </div>
                         <div class="form-group">
                             <label for="lastName" class="required">Last Name</label>
-                            <input type="text" id="lastName" name="lastName" placeholder="Bantolinao" required>
+                            <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label for="signupEmail" class="required">Email Address</label>
-                            <input type="email" id="signupEmail" name="signupEmail" placeholder="danz@sample.com" required>
+                            <input type="email" id="signupEmail" name="signupEmail" placeholder="john@example.com" required>
                         </div>
                         <div class="form-group">
                             <label for="signupPassword" class="required">Password</label>
@@ -876,7 +934,7 @@
 
                 <div class="button-group">
                     <button type="submit" class="btn btn-primary">Create Account</button>
-                    <button type="reset" class="btn btn-secondary">Clear Form</button>
+                    <button type="button" class="btn btn-secondary" onclick="clearSignupTab()">Clear Tab</button>
                 </div>
             </form>
         </div>
@@ -1094,35 +1152,34 @@
 
                 <!-- PAYMENT DETAILS -->
                 <div class="form-section">
-                    <h2 class="section-title">Payment Processing <span class="test-type">FILL & FIND/CLICK</span></h2>
+                    <h2 class="section-title">Payment Processing <span class="test-type">MULTI-SELECT WITH REMOVE</span></h2>
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label for="indent">Indent Payment Details</label>
                             <input type="text" id="indent" name="indent" placeholder="Enter payment indent details">
                         </div>
-                        <div class="form-group">
-                            <label for="paymentFind">Find and Select Payment Type</label>
-                            <div class="input-with-search">
-                                <input type="text" id="paymentFind" name="paymentFind" placeholder="Type to search..." onkeyup="handlePaymentSearch(this)">
-                                <div class="search-results" id="paymentResults"></div>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="paymentBoxFind">Fill and Select Payment Box</label>
+                            <label for="paymentFind">Select Payment Types (Multi-Select)</label>
                             <div class="input-with-search">
-                                <input type="text" id="paymentBoxFind" name="paymentBoxFind" placeholder="Type to search..." onkeyup="handlePaymentBoxSearch(this)">
-                                <div class="search-results" id="paymentBoxResults"></div>
+                                <input type="text" id="paymentFind" name="paymentFind" placeholder="Type to search payment types..." onkeyup="handlePaymentSearch(this)">
+                                <div class="search-results" id="paymentResults"></div>
+                            </div>
+                            <div id="paymentDisplay" style="margin-top: 10px; padding: 10px; background: #fff3cd; border-radius: 6px; display: none; border-left: 4px solid #ff9800;">
+                                <small style="color: #666;">Selected Payment Types: <span id="paymentList" style="font-weight: 600; color: #ff9800;"></span></small>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="findAndClick">Find and Click Payment Button</label>
+                            <label for="paymentBoxFind">Select Payment Methods (Multi-Select)</label>
                             <div class="input-with-search">
-                                <input type="text" id="findAndClick" name="findAndClick" placeholder="Type to search..." onkeyup="handleClickSearch(this)">
-                                <div class="search-results" id="clickResults"></div>
+                                <input type="text" id="paymentBoxFind" name="paymentBoxFind" placeholder="Type to search payment methods..." onkeyup="handlePaymentBoxSearch(this)">
+                                <div class="search-results" id="paymentBoxResults"></div>
+                            </div>
+                            <div id="paymentBoxDisplay" style="margin-top: 10px; padding: 10px; background: #ffe0e0; border-radius: 6px; display: none; border-left: 4px solid #e74c3c;">
+                                <small style="color: #666;">Selected Methods: <span id="paymentBoxList" style="font-weight: 600; color: #e74c3c;"></span></small>
                             </div>
                         </div>
                     </div>
@@ -1159,7 +1216,7 @@
                 <div class="button-group">
                     <button type="button" class="btn btn-info" onclick="openPreviewModal()">Preview Listing</button>
                     <button type="submit" class="btn btn-success">Publish Listing</button>
-                    <button type="reset" class="btn btn-secondary">Clear Form</button>
+                    <button type="button" class="btn btn-secondary" onclick="clearListingTab()">Clear Tab</button>
                 </div>
             </form>
         </div>
@@ -1215,14 +1272,16 @@
                             <div class="search-results" id="fillSelectResults"></div>
                         </div>
                         <div id="fillSelectDisplay" style="margin-top: 10px; padding: 10px; background: #f0fffb; border-radius: 6px; display: none; border-left: 4px solid #27ae60;">
-                            <small style="color: #666;">Selected Items: <span id="fillSelectList" style="font-weight: 600; color: #27ae60;"></span></small>
+                            <small style="color: #666; display: block; margin-bottom: 8px;">Selected Items:</small>
+                            <div id="fillSelectList" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="dropdown-enter">Fill & Enter <span class="test-type">ENTER KEY</span></label>
                         <input type="text" id="dropdown-enter" placeholder="Type and press Enter..." onkeypress="handleEnterKey(event)">
                         <div id="enterSelectedDisplay" style="margin-top: 10px; padding: 10px; background: #f0f8ff; border-radius: 6px; display: none; border-left: 4px solid #3498db;">
-                            <small style="color: #666;">Selected: <span id="enterSelectedList" style="font-weight: 600; color: #3498db;"></span></small>
+                            <small style="color: #666; display: block; margin-bottom: 8px;">Selected:</small>
+                            <div id="enterSelectedList" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
                         </div>
                     </div>
                 </div>
@@ -1252,6 +1311,12 @@
                         <input type="text" id="findInput" placeholder="Type to find items..." onkeyup="handleFindClick(this)">
                         <div class="search-results" id="findClickResults"></div>
                     </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="button-group">
+                    <button type="button" class="btn btn-secondary" onclick="clearComponentsTab()">Clear Tab</button>
                 </div>
             </div>
         </div>
@@ -1498,29 +1563,35 @@
         }
 
         function selectFillSelect(element, value) {
-            // Get current selections
-            let selectedArray = [];
+            // Get current selections from the list
+            const listContainer = document.getElementById('fillSelectList');
             const display = document.getElementById('fillSelectDisplay');
-            const listSpan = document.getElementById('fillSelectList');
+            
+            // Get all currently selected items
+            let selectedArray = Array.from(listContainer.querySelectorAll('.selected-tag')).map(tag => 
+                tag.textContent.replace('×', '').trim()
+            );
             
             // Check if value already selected
-            if (listSpan.textContent.includes(value)) {
+            if (selectedArray.includes(value)) {
                 // Remove it if already selected
-                selectedArray = listSpan.textContent.split(', ').filter(item => item !== value);
+                selectedArray = selectedArray.filter(item => item !== value);
             } else {
                 // Add it to selections
-                if (listSpan.textContent) {
-                    selectedArray = listSpan.textContent.split(', ');
-                }
                 selectedArray.push(value);
             }
             
-            // Update display
+            // Update display with tags
             if (selectedArray.length > 0) {
-                listSpan.textContent = selectedArray.join(', ');
+                listContainer.innerHTML = selectedArray.map(item => 
+                    `<span class="selected-tag product">
+                        ${item}
+                        <button class="remove-btn" onclick="removeTag(this, 'product')">×</button>
+                    </span>`
+                ).join('');
                 display.style.display = 'block';
             } else {
-                listSpan.textContent = '';
+                listContainer.innerHTML = '';
                 display.style.display = 'none';
             }
             
@@ -1539,21 +1610,25 @@
                 
                 // Add to selected list
                 const display = document.getElementById('enterSelectedDisplay');
-                const listSpan = document.getElementById('enterSelectedList');
+                const listContainer = document.getElementById('enterSelectedList');
                 
                 // Get current selections
-                let selectedArray = [];
-                if (listSpan.textContent) {
-                    selectedArray = listSpan.textContent.split(', ');
-                }
+                let selectedArray = Array.from(listContainer.querySelectorAll('.selected-tag')).map(tag => 
+                    tag.textContent.replace('×', '').trim()
+                );
                 
                 // Add if not already there
                 if (!selectedArray.includes(value)) {
                     selectedArray.push(value);
                 }
                 
-                // Update display
-                listSpan.textContent = selectedArray.join(', ');
+                // Update display with tags
+                listContainer.innerHTML = selectedArray.map(item => 
+                    `<span class="selected-tag enter">
+                        ${item}
+                        <button class="remove-btn" onclick="removeTag(this, 'enter')">×</button>
+                    </span>`
+                ).join('');
                 display.style.display = 'block';
                 
                 // Show success feedback on field
@@ -1592,6 +1667,115 @@
                     event.target.style.boxShadow = 'none';
                 }, 2000);
             }
+        }
+
+        function removeTag(button, tagType) {
+            const tag = button.closest('.selected-tag');
+            const tagText = tag.textContent.replace('×', '').trim();
+            const container = tag.parentElement;
+            
+            // Remove the tag
+            tag.remove();
+            
+            // If no more tags, hide the display
+            if (container.querySelectorAll('.selected-tag').length === 0) {
+                const display = container.closest('[id*="Display"]');
+                if (display) {
+                    display.style.display = 'none';
+                }
+            }
+        }
+
+        function handlePaymentSearch(input) {
+            const results = document.getElementById('paymentResults');
+            const options = ['Credit Card', 'Debit Card', 'Bank Transfer', 'Wire Transfer', 'ACH', 'Check'];
+            const value = input.value.toLowerCase();
+            
+            if (!value) {
+                results.classList.remove('show');
+                return;
+            }
+            
+            const filtered = options.filter(opt => opt.toLowerCase().includes(value));
+            results.innerHTML = filtered.map(opt => `<div class="search-result-item" onclick="selectPayment(this, '${opt}')">${opt}</div>`).join('');
+            results.classList.add('show');
+        }
+
+        function selectPayment(element, value) {
+            const listContainer = document.getElementById('paymentList');
+            const display = document.getElementById('paymentDisplay');
+            
+            let selectedArray = Array.from(listContainer.querySelectorAll('.selected-tag')).map(tag => 
+                tag.textContent.replace('×', '').trim()
+            );
+            
+            if (selectedArray.includes(value)) {
+                selectedArray = selectedArray.filter(item => item !== value);
+            } else {
+                selectedArray.push(value);
+            }
+            
+            if (selectedArray.length > 0) {
+                listContainer.innerHTML = selectedArray.map(item => 
+                    `<span class="selected-tag payment">
+                        ${item}
+                        <button class="remove-btn" onclick="removeTag(this, 'payment')">×</button>
+                    </span>`
+                ).join('');
+                display.style.display = 'block';
+            } else {
+                listContainer.innerHTML = '';
+                display.style.display = 'none';
+            }
+            
+            document.getElementById('paymentFind').value = '';
+            document.getElementById('paymentResults').classList.remove('show');
+        }
+
+        function handlePaymentBoxSearch(input) {
+            const results = document.getElementById('paymentBoxResults');
+            const options = ['PayPal', 'Stripe', 'Square', 'Authorize.net', 'Process.net', '2Checkout', 'Worldpay'];
+            const value = input.value.toLowerCase();
+            
+            if (!value) {
+                results.classList.remove('show');
+                return;
+            }
+            
+            const filtered = options.filter(opt => opt.toLowerCase().includes(value));
+            results.innerHTML = filtered.map(opt => `<div class="search-result-item" onclick="selectPaymentBox(this, '${opt}')">${opt}</div>`).join('');
+            results.classList.add('show');
+        }
+
+        function selectPaymentBox(element, value) {
+            const listContainer = document.getElementById('paymentBoxList');
+            const display = document.getElementById('paymentBoxDisplay');
+            
+            let selectedArray = Array.from(listContainer.querySelectorAll('.selected-tag')).map(tag => 
+                tag.textContent.replace('×', '').trim()
+            );
+            
+            if (selectedArray.includes(value)) {
+                selectedArray = selectedArray.filter(item => item !== value);
+            } else {
+                selectedArray.push(value);
+            }
+            
+            if (selectedArray.length > 0) {
+                listContainer.innerHTML = selectedArray.map(item => 
+                    `<span class="selected-tag payment-box">
+                        ${item}
+                        <button class="remove-btn" onclick="removeTag(this, 'payment-box')">×</button>
+                    </span>`
+                ).join('');
+                display.style.display = 'block';
+            } else {
+                listContainer.innerHTML = '';
+                display.style.display = 'none';
+            }
+            
+            document.getElementById('paymentBoxFind').value = '';
+            document.getElementById('paymentBoxResults').classList.remove('show');
         }
 
         function handleFindClick(input) {
@@ -1636,6 +1820,114 @@
 
         function showAlert(message) {
             alert(message);
+        }
+
+        // CLEAR TAB FUNCTIONS
+        function clearSignupTab() {
+            // Clear text inputs
+            document.getElementById('firstName').value = '';
+            document.getElementById('lastName').value = '';
+            document.getElementById('signupEmail').value = '';
+            document.getElementById('signupPassword').value = '';
+            document.getElementById('phone').value = '';
+            
+            // Reset radio buttons to default
+            document.getElementById('individual').checked = true;
+            
+            // Clear checkboxes
+            document.getElementById('newsletter').checked = false;
+            document.getElementById('updates').checked = false;
+            document.getElementById('terms').checked = false;
+            
+            // Reset country dropdown
+            document.getElementById('country').value = 'usa';
+            
+            // Hide success message
+            document.getElementById('signupSuccess').style.display = 'none';
+        }
+
+        function clearListingTab() {
+            // Clear business info inputs
+            document.getElementById('businessName').value = '';
+            document.getElementById('businessType').value = '';
+            document.getElementById('businessEmail').value = '';
+            document.getElementById('businessPhone').value = '';
+            document.getElementById('businessDescription').value = '';
+            
+            // Clear business hours
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            days.forEach(day => {
+                const openCheckId = day.toLowerCase() + 'Open';
+                const closeCheckId = day.toLowerCase() + 'Close';
+                if (document.getElementById(openCheckId)) {
+                    document.getElementById(openCheckId).checked = false;
+                }
+                if (document.getElementById(closeCheckId)) {
+                    document.getElementById(closeCheckId).value = '';
+                }
+            });
+            
+            // Clear payment methods
+            document.querySelectorAll('input[name="paymentMethod"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // Clear plain text
+            document.getElementById('plainText').value = '';
+            
+            // Clear rich text editor
+            document.getElementById('richTextEditor').innerHTML = '';
+            
+            // Clear image uploads and remove previews
+            ['logo', 'photo1', 'photo2', 'photo3'].forEach(uploadId => {
+                document.getElementById(uploadId + 'Upload').value = '';
+                const previewId = uploadId + 'Preview';
+                const previewElement = document.getElementById(previewId);
+                if (previewElement) {
+                    previewElement.innerHTML = '';
+                    previewElement.style.display = 'none';
+                }
+            });
+            
+            // Clear fill & select display
+            document.getElementById('fillSelectDisplay').innerHTML = '';
+            document.getElementById('fillSelectList').innerHTML = '';
+            
+            // Clear search fields
+            document.getElementById('paymentFind').value = '';
+            document.getElementById('paymentBoxFind').value = '';
+            
+            // Clear payment selections and displays
+            document.getElementById('paymentDisplay').style.display = 'none';
+            document.getElementById('paymentList').innerHTML = '';
+            document.getElementById('paymentBoxDisplay').style.display = 'none';
+            document.getElementById('paymentBoxList').innerHTML = '';
+            
+            // Clear result dropdowns
+            document.getElementById('paymentResults').classList.remove('show');
+            document.getElementById('paymentResults').innerHTML = '';
+            document.getElementById('paymentBoxResults').classList.remove('show');
+            document.getElementById('paymentBoxResults').innerHTML = '';
+        }
+
+        function clearComponentsTab() {
+            // Clear fill & enter input
+            document.getElementById('dropdown-enter').value = '';
+            document.getElementById('enterSelectedDisplay').style.display = 'none';
+            document.getElementById('enterSelectedList').innerHTML = '';
+            
+            // Clear find input
+            document.getElementById('findInput').value = '';
+            document.getElementById('findClickResults').classList.remove('show');
+            document.getElementById('findClickResults').innerHTML = '';
+            
+            // Reset toggle switch
+            document.getElementById('featureToggle').checked = false;
+            
+            // Clear fill & select
+            document.getElementById('dropdown-with-textbox').value = '';
+            document.getElementById('fillSelectDisplay').style.display = 'none';
+            document.getElementById('fillSelectList').innerHTML = '';
         }
 
         // Close modal when clicking outside
