@@ -823,6 +823,322 @@
         .selected-tag .remove-btn:hover {
             transform: scale(1.2);
         }
+
+        /* Floating Clear Tab Button */
+        .floating-clear-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95em;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            z-index: 100;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .floating-clear-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .floating-clear-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Tab-specific colors */
+        .floating-clear-btn.signup {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+
+        .floating-clear-btn.signup:hover {
+            background: linear-gradient(135deg, #229954, #1e8449);
+        }
+
+        .floating-clear-btn.listing {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .floating-clear-btn.listing:hover {
+            background: linear-gradient(135deg, #2980b9, #1f618d);
+        }
+
+        .floating-clear-btn.components {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .floating-clear-btn.components:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+        }
+
+        /* Signup Tab Theme - Green */
+        .nav-tab:nth-child(1).active {
+            background: #27ae60;
+            color: white;
+            border-bottom: 3px solid #27ae60;
+        }
+
+        #signup .section-title {
+            color: #27ae60;
+            border-left: 4px solid #27ae60;
+        }
+
+        #signup input:focus,
+        #signup select:focus,
+        #signup textarea:focus {
+            border-color: #27ae60;
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+        }
+
+        #signup .btn-primary {
+            background: #27ae60;
+            border-color: #27ae60;
+        }
+
+        #signup .btn-primary:hover {
+            background: #229954;
+            border-color: #229954;
+        }
+
+        #signup .info-icon {
+            color: #27ae60;
+        }
+
+        #signup .success-message {
+            background: #d5f4e6;
+            border-color: #27ae60;
+            color: #27ae60;
+        }
+
+        /* Listing Tab Theme - Blue */
+        .nav-tab:nth-child(2).active {
+            background: #3498db;
+            color: white;
+            border-bottom: 3px solid #3498db;
+        }
+
+        #listing .section-title {
+            color: #3498db;
+            border-left: 4px solid #3498db;
+        }
+
+        #listing input:focus,
+        #listing select:focus,
+        #listing textarea:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        #listing .btn-success {
+            background: #3498db;
+            border-color: #3498db;
+        }
+
+        #listing .btn-success:hover {
+            background: #2980b9;
+            border-color: #2980b9;
+        }
+
+        #listing .btn-info {
+            background: #3498db;
+            border-color: #3498db;
+        }
+
+        #listing .btn-info:hover {
+            background: #2980b9;
+            border-color: #2980b9;
+        }
+
+        #listing .info-icon {
+            color: #3498db;
+        }
+
+        #listing .success-message {
+            background: #d6eaf8;
+            border-color: #3498db;
+            color: #3498db;
+        }
+
+        /* Components Tab Theme - Red */
+        .nav-tab:nth-child(3).active {
+            background: #e74c3c;
+            color: white;
+            border-bottom: 3px solid #e74c3c;
+        }
+
+        #components .section-title {
+            color: #e74c3c;
+            border-left: 4px solid #e74c3c;
+        }
+
+        #components input:focus,
+        #components select:focus,
+        #components textarea:focus {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        #components .info-icon {
+            color: #e74c3c;
+        }
+
+        /* Display Box Theming */
+        #signup #fillSelectDisplay {
+            background: #d5f4e6 !important;
+            border-left-color: #27ae60 !important;
+        }
+
+        #signup #enterSelectedDisplay {
+            background: #d5f4e6 !important;
+            border-left-color: #27ae60 !important;
+        }
+
+        #listing #paymentDisplay {
+            background: #d6eaf8 !important;
+            border-left-color: #3498db !important;
+        }
+
+        #listing #paymentBoxDisplay {
+            background: #d6eaf8 !important;
+            border-left-color: #3498db !important;
+        }
+
+        #components #enterSelectedDisplay {
+            background: #fadbd8 !important;
+            border-left-color: #e74c3c !important;
+        }
+
+        #components #fillSelectDisplay {
+            background: #fadbd8 !important;
+            border-left-color: #e74c3c !important;
+        }
+
+        #components #dropdownDisplay {
+            background: #fadbd8 !important;
+            border-left-color: #e74c3c !important;
+        }
+
+        /* Selected Tags Theming */
+        #signup .selected-tag.product {
+            border-color: #27ae60 !important;
+            color: #27ae60 !important;
+            background: #d5f4e6 !important;
+        }
+
+        #signup .selected-tag.enter {
+            border-color: #27ae60 !important;
+            color: #27ae60 !important;
+            background: #d5f4e6 !important;
+        }
+
+        #listing .selected-tag.payment {
+            border-color: #3498db !important;
+            color: #3498db !important;
+            background: #d6eaf8 !important;
+        }
+
+        #listing .selected-tag.payment-box {
+            border-color: #3498db !important;
+            color: #3498db !important;
+            background: #d6eaf8 !important;
+        }
+
+        #components .selected-tag.enter {
+            border-color: #e74c3c !important;
+            color: #e74c3c !important;
+            background: #fadbd8 !important;
+        }
+
+        #components .selected-tag.product {
+            border-color: #e74c3c !important;
+            color: #e74c3c !important;
+            background: #fadbd8 !important;
+        }
+
+        /* Dropdown search results highlight for each tab */
+        #signup .search-result-item:hover {
+            background: rgba(39, 174, 96, 0.1);
+            border-left-color: #27ae60;
+        }
+
+        #listing .search-result-item:hover {
+            background: rgba(52, 152, 219, 0.1);
+            border-left-color: #3498db;
+        }
+
+        #components .search-result-item:hover {
+            background: rgba(231, 76, 60, 0.1);
+            border-left-color: #e74c3c;
+        }
+
+        /* Modal header colors based on active tab */
+        #signup .modal-header {
+            border-bottom: 2px solid #27ae60;
+        }
+
+        #listing .modal-header {
+            border-bottom: 2px solid #3498db;
+        }
+
+        #components .modal-header {
+            border-bottom: 2px solid #e74c3c;
+        }
+
+        /* Test Type Badge Theming */
+        #signup .test-type {
+            background: #27ae60;
+        }
+
+        #listing .test-type {
+            background: #3498db;
+        }
+
+        #components .test-type {
+            background: #e74c3c;
+        }
+
+        /* Payment card hover effect for listing tab */
+        #listing .payment-card:hover {
+            border-color: #3498db;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
+        }
+
+        #listing .payment-card input:checked + label {
+            color: #3498db;
+        }
+
+        /* Radio and Checkbox theming */
+        #signup input[type="radio"]:checked + label,
+        #signup input[type="checkbox"]:checked + label {
+            color: #27ae60;
+        }
+
+        #listing input[type="radio"]:checked + label,
+        #listing input[type="checkbox"]:checked + label {
+            color: #3498db;
+        }
+
+        #components input[type="radio"]:checked + label,
+        #components input[type="checkbox"]:checked + label {
+            color: #e74c3c;
+        }
+
+        /* Hide floating button when tab is not active */
+        .tab-content.active .floating-clear-btn {
+            display: block;
+        }
+
+        .tab-content:not(.active) .floating-clear-btn {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -934,9 +1250,10 @@
 
                 <div class="button-group">
                     <button type="submit" class="btn btn-primary">Create Account</button>
-                    <button type="button" class="btn btn-secondary" onclick="clearSignupTab()">Clear Tab</button>
                 </div>
             </form>
+
+            <button type="button" class="floating-clear-btn signup" onclick="clearSignupTab()">Clear Tab</button>
         </div>
 
         <!-- ADD LISTING TAB -->
@@ -1216,9 +1533,10 @@
                 <div class="button-group">
                     <button type="button" class="btn btn-info" onclick="openPreviewModal()">Preview Listing</button>
                     <button type="submit" class="btn btn-success">Publish Listing</button>
-                    <button type="button" class="btn btn-secondary" onclick="clearListingTab()">Clear Tab</button>
                 </div>
             </form>
+
+            <button type="button" class="floating-clear-btn listing" onclick="clearListingTab()">Clear Tab</button>
         </div>
 
         <!-- TEST COMPONENTS TAB -->
@@ -1318,11 +1636,7 @@
                 </div>
             </div>
 
-            <div class="form-section">
-                <div class="button-group">
-                    <button type="button" class="btn btn-secondary" onclick="clearComponentsTab()">Clear Tab</button>
-                </div>
-            </div>
+            <button type="button" class="floating-clear-btn components" onclick="clearComponentsTab()">Clear Tab</button>
         </div>
 
         <!-- FOOTER -->
