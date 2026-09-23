@@ -1253,6 +1253,17 @@
             transition: all 0.3s ease;
             background: white;
             min-height: 140px;
+            font-family: inherit;
+            font-size: 1em;
+            text-align: center;
+        }
+
+        /* Reset button defaults for payment-card buttons */
+        button.payment-card {
+            padding: 20px;
+            border: 2px solid #ddd;
+            background: white;
+            color: inherit;
         }
 
         .payment-card:hover {
@@ -2044,15 +2055,15 @@
                 return text;
             });
             
-            // Build grid with icons
+            // Build grid with buttons (for proper Find & Click functionality)
             grid.innerHTML = paymentOptions.map(method => {
                 const cardId = 'card-' + method.replace(/\s+/g, '-').replace(/\//g, '-');
                 const isSelected = tempPaymentMethods.includes(method);
                 return `
-                    <div id="${cardId}" class="payment-card${isSelected ? ' selected' : ''}" onclick="selectPaymentMethodFromModal('${method}')">
+                    <button type="button" id="${cardId}" class="payment-card${isSelected ? ' selected' : ''}" onclick="selectPaymentMethodFromModal('${method}')">
                         <span class="payment-icon">${paymentIcons[method] || '💳'}</span>
                         <span class="payment-name">${method}</span>
-                    </div>
+                    </button>
                 `;
             }).join('');
             
