@@ -1586,7 +1586,8 @@
                                 <div class="search-results" id="paymentResults"></div>
                             </div>
                             <div id="paymentDisplay" style="margin-top: 10px; padding: 10px; background: #fff3cd; border-radius: 6px; display: none; border-left: 4px solid #ff9800;">
-                                <small style="color: #666;">Selected Payment Types: <span id="paymentList" style="font-weight: 600; color: #ff9800;"></span></small>
+                                <small style="color: #666; display: block; margin-bottom: 8px;">Selected Types:</small>
+                                <div id="paymentList" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -1596,7 +1597,8 @@
                                 <div class="search-results" id="paymentBoxResults"></div>
                             </div>
                             <div id="paymentBoxDisplay" style="margin-top: 10px; padding: 10px; background: #ffe0e0; border-radius: 6px; display: none; border-left: 4px solid #e74c3c;">
-                                <small style="color: #666;">Selected Methods: <span id="paymentBoxList" style="font-weight: 600; color: #e74c3c;"></span></small>
+                                <small style="color: #666; display: block; margin-bottom: 8px;">Selected Methods:</small>
+                                <div id="paymentBoxList" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
                             </div>
                         </div>
                     </div>
@@ -1892,7 +1894,8 @@
         }
 
         // Search handlers
-        const paymentOptions = ['Cash', 'Personal Check', 'Visa', 'Mastercard', 'American Express', 'Discover', 'PayPal', 'ATM/Debit', 'Invoice', 'Insurance', 'Financing', 'Traveler Checks'];
+        const paymentTypes = ['Cash', 'Personal Check', 'Visa', 'Invoice', 'Financing Available', 'Mastercard', 'Insurance', 'American Express', 'ATM / Debit', 'Discover', 'Paypal', 'Traveler\'s Checks'];
+        const paymentOptions = ['Cash', 'Personal Check', 'Visa', 'Invoice', 'Financing Available', 'Mastercard', 'Insurance', 'American Express', 'ATM / Debit', 'Discover', 'Paypal', 'Traveler\'s Checks'];
 
         function handlePaymentSearch(input) {
             const results = document.getElementById('paymentResults');
@@ -1903,13 +1906,41 @@
                 return;
             }
             
-            const filtered = paymentOptions.filter(opt => opt.toLowerCase().includes(value));
-            results.innerHTML = filtered.map(opt => `<div class="search-result-item" onclick="selectPayment(this, '${opt}')">${opt}</div>`).join('');
+            const filtered = paymentTypes.filter(opt => opt.toLowerCase().includes(value));
+            results.innerHTML = filtered.map(opt => `<div class="search-result-item" onclick="selectPaymentType('${opt}')">${opt}</div>`).join('');
             results.classList.add('show');
         }
 
-        function selectPayment(element, value) {
-            document.getElementById('paymentFind').value = value;
+        function selectPaymentType(value) {
+            const listContainer = document.getElementById('paymentList');
+            const display = document.getElementById('paymentDisplay');
+            
+            // Get current selections
+            let selectedArray = Array.from(listContainer.querySelectorAll('.selected-tag')).map(tag => 
+                tag.textContent.replace('×', '').trim()
+            );
+            
+            // Add if not already there
+            if (!selectedArray.includes(value)) {
+                selectedArray.push(value);
+            }
+            
+            // Update display with tags
+            if (selectedArray.length > 0) {
+                listContainer.innerHTML = selectedArray.map(item => 
+                    `<span class="selected-tag payment">
+                        ${item}
+                        <button class="remove-btn" onclick="removeTag(this, 'payment')">×</button>
+                    </span>`
+                ).join('');
+                display.style.display = 'block';
+            } else {
+                listContainer.innerHTML = '';
+                display.style.display = 'none';
+            }
+            
+            // Clear input
+            document.getElementById('paymentFind').value = '';
             document.getElementById('paymentResults').classList.remove('show');
         }
 
@@ -1923,12 +1954,40 @@
             }
             
             const filtered = paymentOptions.filter(opt => opt.toLowerCase().includes(value));
-            results.innerHTML = filtered.map(opt => `<div class="search-result-item" onclick="selectPaymentBox(this, '${opt}')">${opt}</div>`).join('');
+            results.innerHTML = filtered.map(opt => `<div class="search-result-item" onclick="selectPaymentMethod('${opt}')">${opt}</div>`).join('');
             results.classList.add('show');
         }
 
-        function selectPaymentBox(element, value) {
-            document.getElementById('paymentBoxFind').value = value;
+        function selectPaymentMethod(value) {
+            const listContainer = document.getElementById('paymentBoxList');
+            const display = document.getElementById('paymentBoxDisplay');
+            
+            // Get current selections
+            let selectedArray = Array.from(listContainer.querySelectorAll('.selected-tag')).map(tag => 
+                tag.textContent.replace('×', '').trim()
+            );
+            
+            // Add if not already there
+            if (!selectedArray.includes(value)) {
+                selectedArray.push(value);
+            }
+            
+            // Update display with tags
+            if (selectedArray.length > 0) {
+                listContainer.innerHTML = selectedArray.map(item => 
+                    `<span class="selected-tag payment-box">
+                        ${item}
+                        <button class="remove-btn" onclick="removeTag(this, 'payment-box')">×</button>
+                    </span>`
+                ).join('');
+                display.style.display = 'block';
+            } else {
+                listContainer.innerHTML = '';
+                display.style.display = 'none';
+            }
+            
+            // Clear input
+            document.getElementById('paymentBoxFind').value = '';
             document.getElementById('paymentBoxResults').classList.remove('show');
         }
 
@@ -2135,98 +2194,6 @@
                     display.style.display = 'none';
                 }
             }
-        }
-
-        function handlePaymentSearch(input) {
-            const results = document.getElementById('paymentResults');
-            const options = ['Credit Card', 'Debit Card', 'Bank Transfer', 'Wire Transfer', 'ACH', 'Check'];
-            const value = input.value.toLowerCase();
-            
-            if (!value) {
-                results.classList.remove('show');
-                return;
-            }
-            
-            const filtered = options.filter(opt => opt.toLowerCase().includes(value));
-            results.innerHTML = filtered.map(opt => `<div class="search-result-item" onclick="selectPayment(this, '${opt}')">${opt}</div>`).join('');
-            results.classList.add('show');
-        }
-
-        function selectPayment(element, value) {
-            const listContainer = document.getElementById('paymentList');
-            const display = document.getElementById('paymentDisplay');
-            
-            let selectedArray = Array.from(listContainer.querySelectorAll('.selected-tag')).map(tag => 
-                tag.textContent.replace('×', '').trim()
-            );
-            
-            if (selectedArray.includes(value)) {
-                selectedArray = selectedArray.filter(item => item !== value);
-            } else {
-                selectedArray.push(value);
-            }
-            
-            if (selectedArray.length > 0) {
-                listContainer.innerHTML = selectedArray.map(item => 
-                    `<span class="selected-tag payment">
-                        ${item}
-                        <button class="remove-btn" onclick="removeTag(this, 'payment')">×</button>
-                    </span>`
-                ).join('');
-                display.style.display = 'block';
-            } else {
-                listContainer.innerHTML = '';
-                display.style.display = 'none';
-            }
-            
-            document.getElementById('paymentFind').value = '';
-            document.getElementById('paymentResults').classList.remove('show');
-        }
-
-        function handlePaymentBoxSearch(input) {
-            const results = document.getElementById('paymentBoxResults');
-            const options = ['PayPal', 'Stripe', 'Square', 'Authorize.net', 'Process.net', '2Checkout', 'Worldpay'];
-            const value = input.value.toLowerCase();
-            
-            if (!value) {
-                results.classList.remove('show');
-                return;
-            }
-            
-            const filtered = options.filter(opt => opt.toLowerCase().includes(value));
-            results.innerHTML = filtered.map(opt => `<div class="search-result-item" onclick="selectPaymentBox(this, '${opt}')">${opt}</div>`).join('');
-            results.classList.add('show');
-        }
-
-        function selectPaymentBox(element, value) {
-            const listContainer = document.getElementById('paymentBoxList');
-            const display = document.getElementById('paymentBoxDisplay');
-            
-            let selectedArray = Array.from(listContainer.querySelectorAll('.selected-tag')).map(tag => 
-                tag.textContent.replace('×', '').trim()
-            );
-            
-            if (selectedArray.includes(value)) {
-                selectedArray = selectedArray.filter(item => item !== value);
-            } else {
-                selectedArray.push(value);
-            }
-            
-            if (selectedArray.length > 0) {
-                listContainer.innerHTML = selectedArray.map(item => 
-                    `<span class="selected-tag payment-box">
-                        ${item}
-                        <button class="remove-btn" onclick="removeTag(this, 'payment-box')">×</button>
-                    </span>`
-                ).join('');
-                display.style.display = 'block';
-            } else {
-                listContainer.innerHTML = '';
-                display.style.display = 'none';
-            }
-            
-            document.getElementById('paymentBoxFind').value = '';
-            document.getElementById('paymentBoxResults').classList.remove('show');
         }
 
         function handleFindClick(input) {
