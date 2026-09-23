@@ -1580,10 +1580,10 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="paymentFind">Select Payment Types (Multi-Select)</label>
-                            <div class="input-with-search">
-                                <input type="text" id="paymentFind" name="paymentFind" placeholder="Type to search payment types..." onkeyup="handlePaymentSearch(this)">
-                                <div class="search-results" id="paymentResults"></div>
+                            <label for="paymentFind">Select Payment Types (Fill & Add)</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" id="paymentFind" placeholder="Type payment type..." style="flex: 1;">
+                                <button type="button" class="btn btn-primary" onclick="addPaymentType()" style="white-space: nowrap;">Add</button>
                             </div>
                             <div id="paymentDisplay" style="margin-top: 10px; padding: 10px; background: #fff3cd; border-radius: 6px; display: none; border-left: 4px solid #ff9800;">
                                 <small style="color: #666; display: block; margin-bottom: 8px;">Selected Types:</small>
@@ -1591,9 +1591,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="paymentBoxFind">Select Payment Methods (Multi-Select)</label>
+                            <label for="paymentBoxFind">Select Payment Methods (Find & Click)</label>
                             <div class="input-with-search">
-                                <input type="text" id="paymentBoxFind" name="paymentBoxFind" placeholder="Type to search payment methods..." onkeyup="handlePaymentBoxSearch(this)">
+                                <input type="text" id="paymentBoxFind" placeholder="Search and click method..." onkeyup="handlePaymentBoxSearch(this)">
                                 <div class="search-results" id="paymentBoxResults"></div>
                             </div>
                             <div id="paymentBoxDisplay" style="margin-top: 10px; padding: 10px; background: #ffe0e0; border-radius: 6px; display: none; border-left: 4px solid #e74c3c;">
@@ -1897,21 +1897,16 @@
         const paymentTypes = ['Cash', 'Personal Check', 'Visa', 'Invoice', 'Financing Available', 'Mastercard', 'Insurance', 'American Express', 'ATM / Debit', 'Discover', 'Paypal', 'Traveler\'s Checks'];
         const paymentOptions = ['Cash', 'Personal Check', 'Visa', 'Invoice', 'Financing Available', 'Mastercard', 'Insurance', 'American Express', 'ATM / Debit', 'Discover', 'Paypal', 'Traveler\'s Checks'];
 
-        function handlePaymentSearch(input) {
-            const results = document.getElementById('paymentResults');
-            const value = input.value.toLowerCase();
+        // ACTION MODE 1: Fill & Add Button (Select Payment Types)
+        function addPaymentType() {
+            const input = document.getElementById('paymentFind');
+            const value = input.value.trim();
             
             if (!value) {
-                results.classList.remove('show');
+                alert('Please type a payment type');
                 return;
             }
             
-            const filtered = paymentTypes.filter(opt => opt.toLowerCase().includes(value));
-            results.innerHTML = filtered.map(opt => `<div class="search-result-item" onclick="selectPaymentType('${opt}')">${opt}</div>`).join('');
-            results.classList.add('show');
-        }
-
-        function selectPaymentType(value) {
             const listContainer = document.getElementById('paymentList');
             const display = document.getElementById('paymentDisplay');
             
@@ -1920,12 +1915,16 @@
                 tag.textContent.replace('×', '').trim()
             );
             
-            // Add if not already there
-            if (!selectedArray.includes(value)) {
-                selectedArray.push(value);
+            // Check if already exists
+            if (selectedArray.includes(value)) {
+                alert(value + ' is already selected!');
+                return;
             }
             
-            // Update display with tags
+            // Add to list
+            selectedArray.push(value);
+            
+            // Update display
             if (selectedArray.length > 0) {
                 listContainer.innerHTML = selectedArray.map(item => 
                     `<span class="selected-tag payment">
@@ -1934,16 +1933,26 @@
                     </span>`
                 ).join('');
                 display.style.display = 'block';
-            } else {
-                listContainer.innerHTML = '';
-                display.style.display = 'none';
             }
             
             // Clear input
-            document.getElementById('paymentFind').value = '';
-            document.getElementById('paymentResults').classList.remove('show');
+            input.value = '';
         }
+        
+        // Allow Enter key for addPaymentType
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentInput = document.getElementById('paymentFind');
+            if (paymentInput) {
+                paymentInput.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        addPaymentType();
+                    }
+                });
+            }
+        });
 
+        // ACTION MODE 2: Find & Click (Select Payment Methods)
         function handlePaymentBoxSearch(input) {
             const results = document.getElementById('paymentBoxResults');
             const value = input.value.toLowerCase();
@@ -1972,7 +1981,7 @@
                 selectedArray.push(value);
             }
             
-            // Update display with tags
+            // Update display
             if (selectedArray.length > 0) {
                 listContainer.innerHTML = selectedArray.map(item => 
                     `<span class="selected-tag payment-box">
@@ -1981,9 +1990,6 @@
                     </span>`
                 ).join('');
                 display.style.display = 'block';
-            } else {
-                listContainer.innerHTML = '';
-                display.style.display = 'none';
             }
             
             // Clear input
@@ -2337,12 +2343,7 @@
             if (paymentBoxList) paymentBoxList.innerHTML = '';
             
             // Clear result dropdowns
-            const paymentResults = document.getElementById('paymentResults');
             const paymentBoxResults = document.getElementById('paymentBoxResults');
-            if (paymentResults) {
-                paymentResults.classList.remove('show');
-                paymentResults.innerHTML = '';
-            }
             if (paymentBoxResults) {
                 paymentBoxResults.classList.remove('show');
                 paymentBoxResults.innerHTML = '';
