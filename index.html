@@ -1295,6 +1295,50 @@
         .payment-card.selected .payment-name {
             color: #e74c3c;
         }
+
+        /* Business Hours Modal Styles */
+        .business-day-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background: #fafafa;
+            transition: all 0.2s ease;
+        }
+
+        .business-day-card:hover {
+            border-color: #3498db;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.1);
+        }
+
+        .day-closed-checkbox {
+            cursor: pointer;
+        }
+
+        .time-ranges-container {
+            transition: opacity 0.2s ease;
+        }
+
+        .time-range-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .time-range-row input[type="time"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            flex: 1;
+            max-width: 150px;
+        }
+
+        .time-range-row input[type="time"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -1460,65 +1504,11 @@
 
                 <!-- BUSINESS HOURS -->
                 <div class="form-section">
-                    <h2 class="section-title">Business Hours <span class="test-type">FILL & CLICK</span></h2>
+                    <h2 class="section-title">Business Hours <span class="test-type">MODAL & SPLIT</span></h2>
                     
-                    <div class="checkbox-group" style="margin-bottom: 15px;">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="acceptSplit" name="acceptSplit" value="split">
-                            <label for="acceptSplit">Accept Split Hours</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="acceptHide" name="acceptHide" value="hide">
-                            <label for="acceptHide">Accept Hide/Skip Hours</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="acceptOverlap" name="acceptOverlap" value="overlap">
-                            <label for="acceptOverlap">Accept Overlap Hours</label>
-                        </div>
-                    </div>
-
-                    <div class="business-hours-container">
-                        <div class="time-row">
-                            <label>Monday</label>
-                            <input type="time" name="monOpen" value="09:00">
-                            <input type="time" name="monClose" value="17:00">
-                            <button type="button" class="split-hours-btn" onclick="handleSplitHours(this)">Split</button>
-                        </div>
-                        <div class="time-row">
-                            <label>Tuesday</label>
-                            <input type="time" name="tueOpen" value="09:00">
-                            <input type="time" name="tueClose" value="17:00">
-                            <button type="button" class="hide-hours-btn" onclick="handleHideHours(this)">Hide</button>
-                        </div>
-                        <div class="time-row">
-                            <label>Wednesday</label>
-                            <input type="time" name="wedOpen" value="09:00">
-                            <input type="time" name="wedClose" value="17:00">
-                            <button type="button" class="split-hours-btn" onclick="handleSplitHours(this)">Split</button>
-                        </div>
-                        <div class="time-row">
-                            <label>Thursday</label>
-                            <input type="time" name="thuOpen" value="09:00">
-                            <input type="time" name="thuClose" value="17:00">
-                            <button type="button" class="hide-hours-btn" onclick="handleHideHours(this)">Hide</button>
-                        </div>
-                        <div class="time-row">
-                            <label>Friday</label>
-                            <input type="time" name="friOpen" value="09:00">
-                            <input type="time" name="friClose" value="17:00">
-                            <button type="button" class="split-hours-btn" onclick="handleSplitHours(this)">Split</button>
-                        </div>
-                        <div class="time-row">
-                            <label>Saturday</label>
-                            <input type="time" name="satOpen" value="10:00">
-                            <input type="time" name="satClose" value="14:00">
-                            <button type="button" class="hide-hours-btn" onclick="handleHideHours(this)">Hide</button>
-                        </div>
-                        <div class="time-row">
-                            <label>Sunday</label>
-                            <input type="checkbox" name="sunClosed" id="sunClosed">
-                            <label for="sunClosed" style="margin-bottom: 0;">Closed</label>
-                        </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button type="button" class="btn btn-primary" onclick="openBusinessHoursModal('12h')" style="flex: 1; padding: 12px;">⏰ 12 Hours Format</button>
+                        <button type="button" class="btn btn-primary" onclick="openBusinessHoursModal('24h')" style="flex: 1; padding: 12px;">⏰ 24 Hours Format</button>
                     </div>
                 </div>
 
@@ -1707,6 +1697,35 @@
                 <div style="display: flex; gap: 10px; justify-content: flex-end;">
                     <button type="button" class="btn btn-secondary" onclick="closePaymentModal()" style="padding: 10px 20px;">Cancel</button>
                     <button type="button" class="btn btn-primary" onclick="applyPaymentModalSelections()" style="padding: 10px 20px;">Done</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- BUSINESS HOURS MODALS (12h & 24h) -->
+        <div id="businessHoursModal12" class="modal">
+            <div class="modal-content" style="max-width: 700px; padding: 30px; max-height: 85vh; overflow-y: auto;">
+                <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #3498db;">
+                    <h3 style="margin: 0; color: #333;">Business Hours (12-Hour Format)</h3>
+                    <button type="button" onclick="closeBusinessHoursModal('12h')" style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #999;">×</button>
+                </div>
+                <div id="businessHours12Container" style="display: flex; flex-direction: column; gap: 20px;"></div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 25px; padding-top: 15px; border-top: 1px solid #ddd;">
+                    <button type="button" class="btn btn-secondary" onclick="closeBusinessHoursModal('12h')" style="padding: 10px 20px;">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="applyBusinessHours('12h')" style="padding: 10px 20px;">Done</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="businessHoursModal24" class="modal">
+            <div class="modal-content" style="max-width: 700px; padding: 30px; max-height: 85vh; overflow-y: auto;">
+                <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #3498db;">
+                    <h3 style="margin: 0; color: #333;">Business Hours (24-Hour Format)</h3>
+                    <button type="button" onclick="closeBusinessHoursModal('24h')" style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #999;">×</button>
+                </div>
+                <div id="businessHours24Container" style="display: flex; flex-direction: column; gap: 20px;"></div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 25px; padding-top: 15px; border-top: 1px solid #ddd;">
+                    <button type="button" class="btn btn-secondary" onclick="closeBusinessHoursModal('24h')" style="padding: 10px 20px;">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="applyBusinessHours('24h')" style="padding: 10px 20px;">Done</button>
                 </div>
             </div>
         </div>
@@ -2110,6 +2129,225 @@
             closePaymentModal();
         }
 
+        // BUSINESS HOURS MODALS (12h & 24h formats)
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        let businessHours12 = {};
+        let businessHours24 = {};
+
+        function initializeBusinessHours(format) {
+            const hoursObj = format === '12h' ? businessHours12 : businessHours24;
+            days.forEach(day => {
+                if (!hoursObj[day]) {
+                    hoursObj[day] = {
+                        isClosed: false,
+                        timeRanges: [{ start: '09:00', end: '17:00' }]
+                    };
+                }
+            });
+            return hoursObj;
+        }
+
+        function openBusinessHoursModal(format) {
+            const hoursObj = initializeBusinessHours(format);
+            const containerId = format === '12h' ? 'businessHours12Container' : 'businessHours24Container';
+            const container = document.getElementById(containerId);
+            
+            // Helper to format 12h with AM/PM
+            const formatTime12h = (time) => {
+                const [hours, minutes] = time.split(':');
+                let h = parseInt(hours);
+                const ampm = h >= 12 ? 'PM' : 'AM';
+                h = h % 12 || 12;
+                return `${h.toString().padStart(2, '0')}:${minutes} ${ampm}`;
+            };
+            
+            // Update display when time changes
+            const updateDisplay = (format, day, rangeIndex) => {
+                const dayCard = container.querySelector(`[data-day="${day}"]`);
+                const timeRangeRow = dayCard.querySelectorAll('.time-range-row')[rangeIndex];
+                if (!timeRangeRow) return;
+                
+                const startInput = timeRangeRow.querySelector('.time-start');
+                const endInput = timeRangeRow.querySelector('.time-end');
+                const displayDiv = timeRangeRow.querySelector('.time-display');
+                
+                if (displayDiv) {
+                    const displayTime = format === '12h' 
+                        ? `${formatTime12h(startInput.value)} to ${formatTime12h(endInput.value)}`
+                        : `${startInput.value} to ${endInput.value}`;
+                    displayDiv.textContent = displayTime;
+                }
+            };
+            
+            container.innerHTML = days.map((day) => {
+                const dayData = hoursObj[day];
+                return `
+                    <div class="business-day-card" data-day="${day}">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                            <strong style="min-width: 100px; font-size: 1.1em;">${day}</strong>
+                            <input type="checkbox" class="day-closed-checkbox" data-day="${day}" ${dayData.isClosed ? 'checked' : ''} onchange="toggleDayClosed('${format}', '${day}', this)">
+                            <label style="margin: 0; cursor: pointer;">Closed</label>
+                        </div>
+                        <div class="time-ranges-container" data-day="${day}" style="${dayData.isClosed ? 'opacity: 0.5; pointer-events: none;' : ''}">
+                            ${dayData.timeRanges.map((range, rangeIndex) => {
+                                const displayTime = format === '12h' 
+                                    ? `${formatTime12h(range.start)} to ${formatTime12h(range.end)}`
+                                    : `${range.start} to ${range.end}`;
+                                
+                                // Different colors for 12h vs 24h
+                                const bgColor = format === '12h' ? '#e3f2fd' : '#e8f5e9';
+                                const borderColor = format === '12h' ? '#3498db' : '#27ae60';
+                                const textColor = format === '12h' ? '#1976d2' : '#1b5e20';
+                                
+                                // Generate 24-hour time options for dropdown
+                                let timeOptions = '';
+                                for (let h = 0; h < 24; h++) {
+                                    for (let m = 0; m < 60; m += 15) {
+                                        const timeStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+                                        timeOptions += `<option value="${timeStr}" ${range.start === timeStr ? 'selected' : ''}>${timeStr}</option>`;
+                                    }
+                                }
+                                
+                                let timeOptionsEnd = '';
+                                for (let h = 0; h < 24; h++) {
+                                    for (let m = 0; m < 60; m += 15) {
+                                        const timeStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+                                        timeOptionsEnd += `<option value="${timeStr}" ${range.end === timeStr ? 'selected' : ''}>${timeStr}</option>`;
+                                    }
+                                }
+                                
+                                // For 24h: use dropdowns, for 12h: use native time input
+                                const timeInputHTML = format === '24h' 
+                                    ? `<select class="time-start" value="${range.start}" data-range-index="${rangeIndex}" data-day="${day}" ${dayData.isClosed ? 'disabled' : ''} style="padding: 8px; border: 2px solid red; border-radius: 4px; flex: 1; cursor: pointer;" onchange="updateTimeDisplay('${format}', '${day}', ${rangeIndex})"><option>-- Start Time --</option>${timeOptions}</select>`
+                                    : `<input type="time" class="time-start" value="${range.start}" data-range-index="${rangeIndex}" data-day="${day}" ${dayData.isClosed ? 'disabled' : ''} style="padding: 8px; border: 2px solid red; border-radius: 4px; flex: 1;" onchange="updateTimeDisplay('${format}', '${day}', ${rangeIndex})">`;
+                                
+                                const timeInputEndHTML = format === '24h'
+                                    ? `<select class="time-end" value="${range.end}" data-range-index="${rangeIndex}" data-day="${day}" ${dayData.isClosed ? 'disabled' : ''} style="padding: 8px; border: 2px solid red; border-radius: 4px; flex: 1; cursor: pointer;" onchange="updateTimeDisplay('${format}', '${day}', ${rangeIndex})"><option>-- End Time --</option>${timeOptionsEnd}</select>`
+                                    : `<input type="time" class="time-end" value="${range.end}" data-range-index="${rangeIndex}" data-day="${day}" ${dayData.isClosed ? 'disabled' : ''} style="padding: 8px; border: 2px solid red; border-radius: 4px; flex: 1;" onchange="updateTimeDisplay('${format}', '${day}', ${rangeIndex})">`;
+                                
+                                return `
+                                    <div class="time-range-row" style="flex-direction: column; gap: 8px;">
+                                        <div style="display: flex; gap: 10px; align-items: center;">
+                                            ${timeInputHTML}
+                                            <span style="font-weight: bold;">to</span>
+                                            ${timeInputEndHTML}
+                                            ${dayData.timeRanges.length > 1 ? `<button type="button" class="btn btn-danger" onclick="removeTimeRange('${format}', '${day}', ${rangeIndex})" style="padding: 6px 10px; font-size: 0.9em;">Remove</button>` : ''}
+                                        </div>
+                                        <div class="time-display" style="padding: 10px; background: ${bgColor}; border: 2px solid ${borderColor}; border-radius: 4px; text-align: center; font-weight: bold; font-size: 1.1em; color: ${textColor};">
+                                            ${displayTime}
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="saveAndAddTimeRange('${format}', '${day}')" style="padding: 8px 12px; font-size: 0.9em; margin-top: 10px;" ${dayData.isClosed ? 'disabled' : ''}>+ Add Time Range</button>
+                    </div>
+                `;
+            }).join('');
+            
+            const modalId = format === '12h' ? 'businessHoursModal12' : 'businessHoursModal24';
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function updateTimeDisplay(format, day, rangeIndex) {
+            const containerId = format === '12h' ? 'businessHours12Container' : 'businessHours24Container';
+            const container = document.getElementById(containerId);
+            
+            // Helper to format 12h with AM/PM
+            const formatTime12h = (time) => {
+                const [hours, minutes] = time.split(':');
+                let h = parseInt(hours);
+                const ampm = h >= 12 ? 'PM' : 'AM';
+                h = h % 12 || 12;
+                return `${h.toString().padStart(2, '0')}:${minutes} ${ampm}`;
+            };
+            
+            const dayCard = container.querySelector(`[data-day="${day}"]`);
+            const timeRangeRows = dayCard.querySelectorAll('.time-range-row');
+            const timeRangeRow = timeRangeRows[rangeIndex];
+            
+            const startInput = timeRangeRow.querySelector('.time-start');
+            const endInput = timeRangeRow.querySelector('.time-end');
+            const displayDiv = timeRangeRow.querySelector('.time-display');
+            
+            const displayTime = format === '12h' 
+                ? `${formatTime12h(startInput.value)} to ${formatTime12h(endInput.value)}`
+                : `${startInput.value} to ${endInput.value}`;
+            
+            // Update display styling based on format
+            const bgColor = format === '12h' ? '#e3f2fd' : '#e8f5e9';
+            const borderColor = format === '12h' ? '#3498db' : '#27ae60';
+            const textColor = format === '12h' ? '#1976d2' : '#1b5e20';
+            
+            displayDiv.textContent = displayTime;
+            displayDiv.style.background = bgColor;
+            displayDiv.style.borderColor = borderColor;
+            displayDiv.style.color = textColor;
+        }
+
+        function toggleDayClosed(format, day, checkbox) {
+            const hoursObj = format === '12h' ? businessHours12 : businessHours24;
+            hoursObj[day].isClosed = checkbox.checked;
+            openBusinessHoursModal(format);
+        }
+
+        function saveAndAddTimeRange(format, day) {
+            const hoursObj = format === '12h' ? businessHours12 : businessHours24;
+            const containerId = format === '12h' ? 'businessHours12Container' : 'businessHours24Container';
+            const container = document.getElementById(containerId);
+            
+            // SAVE current edited times BEFORE adding new range
+            const dayCard = container.querySelector(`[data-day="${day}"]`);
+            const timeRangesContainer = dayCard.querySelector('.time-ranges-container');
+            const timeRangeRows = timeRangesContainer.querySelectorAll('.time-range-row');
+            
+            timeRangeRows.forEach((row, index) => {
+                const startInput = row.querySelector('.time-start');
+                const endInput = row.querySelector('.time-end');
+                if (hoursObj[day].timeRanges[index]) {
+                    hoursObj[day].timeRanges[index].start = startInput.value;
+                    hoursObj[day].timeRanges[index].end = endInput.value;
+                }
+            });
+            
+            // NOW add new time range with default values
+            hoursObj[day].timeRanges.push({ start: '09:00', end: '17:00' });
+            openBusinessHoursModal(format);
+        }
+
+        function removeTimeRange(format, day, rangeIndex) {
+            const hoursObj = format === '12h' ? businessHours12 : businessHours24;
+            if (hoursObj[day].timeRanges.length > 1) {
+                hoursObj[day].timeRanges.splice(rangeIndex, 1);
+                openBusinessHoursModal(format);
+            }
+        }
+
+        function applyBusinessHours(format) {
+            const hoursObj = format === '12h' ? businessHours12 : businessHours24;
+            const containerId = format === '12h' ? 'businessHours12Container' : 'businessHours24Container';
+            const container = document.getElementById(containerId);
+            
+            days.forEach(day => {
+                const dayCard = container.querySelector(`[data-day="${day}"]`);
+                const closedCheckbox = dayCard.querySelector('.day-closed-checkbox');
+                const timeRangesContainer = dayCard.querySelector('.time-ranges-container');
+                
+                hoursObj[day].isClosed = closedCheckbox.checked;
+                hoursObj[day].timeRanges = Array.from(timeRangesContainer.querySelectorAll('.time-range-row')).map(row => ({
+                    start: row.querySelector('.time-start').value,
+                    end: row.querySelector('.time-end').value
+                }));
+            });
+            
+            closeBusinessHoursModal(format);
+        }
+
+        function closeBusinessHoursModal(format) {
+            const modalId = format === '12h' ? 'businessHoursModal12' : 'businessHoursModal24';
+            document.getElementById(modalId).classList.remove('show');
+        }
+
         function handleClickSearch(input) {
             const results = document.getElementById('clickResults');
             const value = input.value.toLowerCase();
@@ -2402,17 +2640,18 @@
             document.getElementById('indent').value = '';
             
             // Clear business hours
-            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            businessHours12 = {};
+            businessHours24 = {};
             days.forEach(day => {
-                const openCheckId = day.toLowerCase() + 'Open';
-                const closeCheckId = day.toLowerCase() + 'Close';
-                if (document.getElementById(openCheckId)) {
-                    document.getElementById(openCheckId).checked = false;
-                }
-                if (document.getElementById(closeCheckId)) {
-                    document.getElementById(closeCheckId).value = '';
-                }
+                businessHours12[day] = { isClosed: false, timeRanges: [{ start: '09:00', end: '17:00' }] };
+                businessHours24[day] = { isClosed: false, timeRanges: [{ start: '09:00', end: '17:00' }] };
             });
+            
+            // Close any open business hours modals
+            const bhModal12 = document.getElementById('businessHoursModal12');
+            const bhModal24 = document.getElementById('businessHoursModal24');
+            if (bhModal12) bhModal12.classList.remove('show');
+            if (bhModal24) bhModal24.classList.remove('show');
             
             // Clear payment methods checkboxes
             document.querySelectorAll('input[name="payment"]').forEach(checkbox => {
