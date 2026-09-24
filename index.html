@@ -1510,6 +1510,21 @@
                         <button type="button" class="btn btn-primary" onclick="openBusinessHoursModal('12h')" style="flex: 1; padding: 12px;">⏰ 12 Hours Format</button>
                         <button type="button" class="btn btn-primary" onclick="openBusinessHoursModal('24h')" style="flex: 1; padding: 12px;">⏰ 24 Hours Format</button>
                     </div>
+                    
+                    <!-- Hidden form inputs for AFEX auto-fill compatibility -->
+                    <input type="hidden" name="monOpen" id="monOpen" value="09:00">
+                    <input type="hidden" name="monClose" id="monClose" value="17:00">
+                    <input type="hidden" name="tueOpen" id="tueOpen" value="09:00">
+                    <input type="hidden" name="tueClose" id="tueClose" value="17:00">
+                    <input type="hidden" name="wedOpen" id="wedOpen" value="09:00">
+                    <input type="hidden" name="wedClose" id="wedClose" value="17:00">
+                    <input type="hidden" name="thuOpen" id="thuOpen" value="09:00">
+                    <input type="hidden" name="thuClose" id="thuClose" value="17:00">
+                    <input type="hidden" name="friOpen" id="friOpen" value="09:00">
+                    <input type="hidden" name="friClose" id="friClose" value="17:00">
+                    <input type="hidden" name="satOpen" id="satOpen" value="10:00">
+                    <input type="hidden" name="satClose" id="satClose" value="14:00">
+                    <input type="hidden" name="sunClosed" id="sunClosed" value="false">
                 </div>
 
                 <!-- IMAGES -->
@@ -2328,6 +2343,17 @@
             const containerId = format === '12h' ? 'businessHours12Container' : 'businessHours24Container';
             const container = document.getElementById(containerId);
             
+            // Day name to form input mapping
+            const dayNameMap = {
+                'Monday': { open: 'monOpen', close: 'monClose' },
+                'Tuesday': { open: 'tueOpen', close: 'tueClose' },
+                'Wednesday': { open: 'wedOpen', close: 'wedClose' },
+                'Thursday': { open: 'thuOpen', close: 'thuClose' },
+                'Friday': { open: 'friOpen', close: 'friClose' },
+                'Saturday': { open: 'satOpen', close: 'satClose' },
+                'Sunday': { open: 'sunOpen', close: 'sunClose' }
+            };
+            
             days.forEach(day => {
                 const dayCard = container.querySelector(`[data-day="${day}"]`);
                 const closedCheckbox = dayCard.querySelector('.day-closed-checkbox');
@@ -2338,7 +2364,31 @@
                     start: row.querySelector('.time-start').value,
                     end: row.querySelector('.time-end').value
                 }));
+                
+                // SYNC TO HIDDEN FORM INPUTS (AFEX compatibility)
+                const fieldNames = dayNameMap[day];
+                if (fieldNames) {
+                    const openInput = document.getElementById(fieldNames.open);
+                    const closeInput = document.getElementById(fieldNames.close);
+                    
+                    if (hoursObj[day].isClosed) {
+                        // Day is closed - set a marker value
+                        if (openInput) openInput.value = 'closed';
+                        if (closeInput) closeInput.value = 'closed';
+                    } else if (hoursObj[day].timeRanges.length > 0) {
+                        // Set first time range to hidden inputs
+                        const firstRange = hoursObj[day].timeRanges[0];
+                        if (openInput) openInput.value = firstRange.start;
+                        if (closeInput) closeInput.value = firstRange.end;
+                    }
+                }
             });
+            
+            // Sync Sunday closed status
+            const sunClosedCheckbox = container.querySelector('[data-day="Sunday"] .day-closed-checkbox');
+            if (sunClosedCheckbox) {
+                document.getElementById('sunClosed').value = sunClosedCheckbox.checked ? 'true' : 'false';
+            }
             
             closeBusinessHoursModal(format);
         }
@@ -2646,6 +2696,21 @@
                 businessHours12[day] = { isClosed: false, timeRanges: [{ start: '09:00', end: '17:00' }] };
                 businessHours24[day] = { isClosed: false, timeRanges: [{ start: '09:00', end: '17:00' }] };
             });
+            
+            // Reset hidden form inputs to defaults
+            document.getElementById('monOpen').value = '09:00';
+            document.getElementById('monClose').value = '17:00';
+            document.getElementById('tueOpen').value = '09:00';
+            document.getElementById('tueClose').value = '17:00';
+            document.getElementById('wedOpen').value = '09:00';
+            document.getElementById('wedClose').value = '17:00';
+            document.getElementById('thuOpen').value = '09:00';
+            document.getElementById('thuClose').value = '17:00';
+            document.getElementById('friOpen').value = '09:00';
+            document.getElementById('friClose').value = '17:00';
+            document.getElementById('satOpen').value = '10:00';
+            document.getElementById('satClose').value = '14:00';
+            document.getElementById('sunClosed').value = 'false';
             
             // Close any open business hours modals
             const bhModal12 = document.getElementById('businessHoursModal12');
